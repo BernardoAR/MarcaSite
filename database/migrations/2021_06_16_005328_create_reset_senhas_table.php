@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMateriaisTable extends Migration
+class CreateResetSenhasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateMateriaisTable extends Migration
      */
     public function up()
     {
-        Schema::create('materiais', function (Blueprint $table) {
-            $table->id();
-            $table->string('arquivo');
-            $table->timestamps();
+        Schema::create('reset_senhas', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -27,6 +27,6 @@ class CreateMateriaisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('materiais');
+        Schema::dropIfExists('reset_senhas');
     }
 }

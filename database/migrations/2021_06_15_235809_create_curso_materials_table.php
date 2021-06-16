@@ -14,8 +14,12 @@ class CreateCursoMaterialsTable extends Migration
     public function up()
     {
         Schema::create('curso_materiais', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('cursos_id');
+            $table->unsignedBigInteger('materiais_id');
+            $table->foreign('cursos_id')->references('id')->on('cursos')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('materiais_id')->references('id')->on('materiais')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
+            $table->primary(array('cursos_id', 'materiais_id'));
         });
     }
 
