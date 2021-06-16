@@ -14,7 +14,12 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        //
+        return view('welcome');
+        return response()->json(
+            [
+                'msg' => 'Nós retornaremos apenas JSON'
+            ]
+        );
     }
 
     /**
