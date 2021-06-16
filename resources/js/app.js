@@ -10,11 +10,17 @@ import App from "./view/App.vue";
 import VueRouter from "vue-router";
 import routes from "./router/router";
 import Vue from "vue";
+import ViewUI from "view-design";
+import "view-design/dist/styles/iview.css";
+import common from "./common";
 // Usando com o Vue
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
-//C onfigurações do Router
+Vue.use(ViewUI);
+// Adiciona o common como generico
+Vue.mixin(common);
+// Configurações do Router
 const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
