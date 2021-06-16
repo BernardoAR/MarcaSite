@@ -18,7 +18,6 @@ class CreateStatusTable extends Migration
             $table->tinyInteger('id', true, true);
             $table->string('titulo');
             $table->timestamps();
-            $table->primary('id');
         });
         $this->posCriacao('Cancelado', 'Aguardando Pagamento ', 'Pago');
     }

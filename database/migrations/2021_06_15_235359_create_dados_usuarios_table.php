@@ -18,7 +18,7 @@ class CreateDadosUsuariosTable extends Migration
             $table->char('CPF', 11);
             $table->string('empresa');
             $table->unsignedBigInteger('enderecos_id')->nullable();
-            $table->tinyInteger('tipo_usuarios_id')->unsigned();
+            $table->tinyInteger('tipo_usuarios_id')->unsigned()->nullable();
             $table->unsignedBigInteger('usuarios_id');
             $table->foreign('enderecos_id')->references('id')->on('enderecos')->cascadeOnUpdate()->nullOnDelete();
             $table->foreign('tipo_usuarios_id')->references('id')->on('tipo_usuarios')->cascadeOnUpdate()->nullOnDelete();
