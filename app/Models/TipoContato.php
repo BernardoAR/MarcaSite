@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TipoContato extends Model
 {
     use HasFactory;
+    protected $filleable = [
+        'titulo',
+    ];
 }

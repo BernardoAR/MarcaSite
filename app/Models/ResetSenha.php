@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class ResetSenha extends Model
 {
     use HasFactory;
+    protected $filleable = ['email', 'token', 'created_at'];
 }
