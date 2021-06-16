@@ -1,22 +1,16 @@
-import Home from "../view/Home.vue";
-import Hello from "../view/Hello.vue";
-import Example from "../view/Example.vue";
+import Login from "../view/Login.vue";
+import Cadastro from "../view/Cadastro.vue";
 
 const routes = [
     {
         path: "/",
-        name: "home",
-        component: Home
+        name: "login",
+        component: Login
     },
     {
-        path: "/hello",
-        name: "hello",
-        component: Hello
-    },
-    {
-        path: "/example",
-        name: "example",
-        component: Example
+        path: "/cadastro",
+        name: "cadastro",
+        component: Cadastro
     }
 ];
 export default routes;
