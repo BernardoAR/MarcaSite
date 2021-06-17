@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $table = 'usuarios';
     /**
      * Atributos em massa
      *
@@ -28,6 +29,9 @@ class Usuario extends Authenticatable
     protected $hidden = [
         'senha',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'email_verificado'
     ];
 
     /**
@@ -38,4 +42,8 @@ class Usuario extends Authenticatable
     protected $casts = [
         'email_verificado' => 'datetime',
     ];
+    public function getAuthPassword()
+    {
+        return $this->senha;
+    }
 }

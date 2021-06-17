@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TipoContato as ResourcesTipoContato;
 use App\Models\TipoContato;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class TipoContatoController extends Controller
      */
     public function index()
     {
-        //
+        return ResourcesTipoContato::collection(TipoContato::orderBy('titulo', 'ASC')->get());
     }
 
     /**
@@ -35,7 +36,10 @@ class TipoContatoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $novoTipoContato = new TipoContato();
+        $novoTipoContato->titulo = $request->tipoContato['titulo'];
+        $novoTipoContato->save();
+        return $novoTipoContato;
     }
 
     /**
@@ -64,22 +68,34 @@ class TipoContatoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TipoContato  $tipoContato
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoContato $tipoContato)
+    public function update(Request $request, $id)
     {
-        //
+        $tipoContato = TipoContato::find($id);
+        // Se existir, atualiza
+        if ($tipoContato) {
+            $tipoContato->titulo = $request->tipoContato['titulo'];
+            $tipoContato->save();
+            return $tipoContato;
+        }
+        return 'Tipo de Contato não encontrado.';
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TipoContato  $tipoContato
+     * @param int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoContato $tipoContato)
+    public function destroy($id)
     {
-        //
+        $tipoContato = TipoContato::find($id);
+        if ($tipoContato) {
+            $tipoContato->delete();
+            return 'Tipo de Contato deletado com sucesso.';
+        }
+        return 'Tipo de Contato não encontrado.';
     }
 }

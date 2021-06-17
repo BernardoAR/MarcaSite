@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('spa');
 });
+Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
+
+
+// Prefixo para o login
+Route::prefix('/login')->group(function () {
+    Route::post('/logar', [LoginController::class, 'logar']);
+});
+
+Route::get('/{any}', [App\Http\Controllers\LoginController::class, 'index'])->where('any', '.*');
