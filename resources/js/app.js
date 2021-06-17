@@ -13,6 +13,7 @@ import Vue from "vue";
 import ViewUI from "view-design";
 import "view-design/dist/styles/iview.css";
 import common from "./common";
+import store from "./store";
 // Usando com o Vue
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -32,5 +33,6 @@ Vue.component("app", require("./view/App.vue").default);
 const app = new Vue({
     el: "#app",
     components: { App },
-    router
+    router,
+    store
 });

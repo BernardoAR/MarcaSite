@@ -50,6 +50,6 @@ class LoginController extends Controller
     public function deslogar()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect('/');
     }
 }

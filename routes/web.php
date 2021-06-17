@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\LoginController::class, 'index']);
+Route::get('/', function () {
+    return view('spa');
+});
+
 
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
 
@@ -22,10 +25,6 @@ Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar'
 // Prefixo para o login
 Route::prefix('/login')->group(function () {
     Route::post('/logar', [LoginController::class, 'logar']);
-    Route::post('/deslogar', [LoginController::class, 'deslogar']);
 });
 
-Route::get('/{any}', [App\Http\Controllers\SpaController::class, 'index'])->where('any', '.*');
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/{any}', [App\Http\Controllers\LoginController::class, 'index'])->where('any', '.*');
