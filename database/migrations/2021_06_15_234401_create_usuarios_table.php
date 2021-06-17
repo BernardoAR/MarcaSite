@@ -19,8 +19,10 @@ class CreateUsuariosTable extends Migration
             $table->timestamp('email_verificado')->nullable();
             $table->string('senha');
             $table->string('api_token', 80);
+            $table->tinyInteger('cargo_usuarios_id')->unsigned()->nullable()->default(2);
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('cargo_usuarios_id')->references('id')->on('cargo_usuarios')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
