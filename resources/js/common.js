@@ -39,7 +39,7 @@ export default {
             });
         },
         erro(desc, titulo = "Erro!") {
-             this.$Notice.error({
+            this.$Notice.error({
                 title: titulo,
                 desc: desc
             });

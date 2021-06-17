@@ -87,7 +87,17 @@
             <label for="quantidade">Quantidade de Inscritos (máx):</label>
           </div>
         </div>
-        <button type="button" class="btn btn-primary">Cadastrar</button>
+        <div class="form-group">
+          <b-form-file
+            accept="image/*, .pdf, .zip, .ppt, .pptx, .zip, .rar"
+            v-on:change="onFileChange"
+            placeholder="Arquivo (Material)"
+            drop-placeholder="Solte o arquivo aqui..."
+          ></b-form-file>
+        </div>
+        <button type="button" class="btn btn-primary" @click="teste">
+          Cadastrar
+        </button>
       </div>
     </div>
   </div>
@@ -96,6 +106,7 @@
 export default {
   data: function () {
     return {
+      file: null,
       data: {
         quantidade: "",
         nomeCurso: "",
@@ -105,6 +116,16 @@ export default {
         valor: "",
       },
     };
+  },
+  methods: {
+    onFileChange(e) {
+      this.file = e.target.files[0];
+    },
+    async cadastra() {
+      let formData = new FormData();
+      formData.append("file", this.file);
+      await this.chamaApi("post", "/api/arquivo/upload", formData);
+    },
   },
 };
 </script>

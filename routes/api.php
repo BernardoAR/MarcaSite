@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArquivoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TipoContatoController;
 use App\Http\Controllers\TipoUsuarioController;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/arquivo/upload', [ArquivoController::class, 'upload']);
 // Middleware para ter acesso apenas quando logado
 Route::prefix('/app')->middleware([ChecaLogin::class])->group(function () {
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
@@ -32,9 +34,6 @@ Route::prefix('/app')->middleware([ChecaLogin::class])->group(function () {
         Route::delete('/{id}', [TipoContatoController::class, 'destroy']);
     });
 });
-Route::get('/', function () {
-    //
-})->middleware('web');
 Route::prefix('/usuario')->group(function () {
     Route::post('/store', [UsuarioController::class, 'store']);
 });
