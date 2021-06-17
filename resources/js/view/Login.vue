@@ -1,84 +1,68 @@
 <template>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header">Login</div>
-          <div class="card-body">
-            <div class="form-group row">
-              <label for="email" class="col-md-4 col-form-label text-md-right"
-                >E-mail</label
-              >
-              <div class="col-md-6">
-                <div class="space">
-                  <input
-                    id="email"
-                    type="email"
-                    class="form-control"
-                    name="email"
-                    placeholder="E-mail"
-                    autocomplete="email"
-                    v-model="data.email"
-                    required
-                    autofocus
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="email" class="col-md-4 col-form-label text-md-right"
-                >Senha</label
-              >
-              <div class="col-md-6">
-                <div class="space">
-                  <input
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    placeholder="Senha"
-                    v-model="data.senha"
-                    required
-                    autocomplete="current-password"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-md-6 offset-md-4">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    name="remember"
-                    v-model="data.lembrar"
-                  />
-
-                  <label class="form-check-label" for="remember">
-                    Lembrar-me
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group row mb-0">
-              <div class="col-md-8 offset-md-4">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  @click="login"
-                  :disabled="estaLogando"
-                  :loading="estaLogando"
-                >
-                  {{ estaLogando ? "Logando..." : "Login" }}
-                </button>
-
-                <a class="btn btn-link" href="ESQUECEUASENHA">
-                  Esqueceu a Senha?
-                </a>
-              </div>
+    <div class="card card-login mx-auto mt-5 col-sm-5">
+      <div class="card-header">Login</div>
+      <div class="card-body">
+        <div class="form-group">
+          <div class="form-label-group">
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              name="email"
+              placeholder="E-mail"
+              autocomplete="email"
+              v-model="data.email"
+              required
+              autofocus
+            />
+            <label for="email">E-mail</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label-group">
+            <input
+              id="password"
+              type="password"
+              class="form-control"
+              name="password"
+              placeholder="Senha"
+              v-model="data.senha"
+              required
+              autocomplete="current-password"
+            />
+            <label for="password">Senha</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label-group">
+            <div class="form-check">
+              <input
+                id="remember"
+                class="form-check-input"
+                type="checkbox"
+                name="remember"
+                v-model="data.lembrar"
+              />
+              <label class="form-check-label" for="remember">
+                Lembrar-me
+              </label>
             </div>
           </div>
+        </div>
+        <button
+          type="butoon"
+          class="btn btn-primary"
+          @click="login"
+          :disabled="estaLogando"
+          :loading="estaLogando"
+        >
+          {{ estaLogando ? "Logando..." : "Login" }}
+        </button>
+        <div class="text-center">
+          <router-link class="d-block mt-3" :to="{ name: 'cadastro' }"
+            >Cadastre-se</router-link
+          >
         </div>
       </div>
     </div>

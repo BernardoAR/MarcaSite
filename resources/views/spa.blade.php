@@ -11,7 +11,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
-<body>
+<body class="{{ Auth::check() ? '' : 'bg-dark' }}">
   <div id="app">
     @if(Auth::check())
     <app :usuario="{{Auth::user()}}"></app>

@@ -1,10 +1,18 @@
 <template>
   <div>
-    <navbar></navbar>
-    <main class="py-4">
-      <router-view></router-view>
-    </main>
-    <footer-comp></footer-comp>
+    <div v-if="$store.state.usuario">
+      <navbar></navbar>
+      <main class="py-4">
+        <router-view></router-view>
+      </main>
+      <footer-comp></footer-comp>
+    </div>
+    <div v-else>
+      <main class="py-4">
+        <router-view></router-view>
+      </main>
+      <footer-comp></footer-comp>
+    </div>
   </div>
 </template>
 <script>

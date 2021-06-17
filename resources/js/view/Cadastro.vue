@@ -1,67 +1,68 @@
 <template>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header">Cadastro</div>
-          <div class="card-body">
-            <div class="form-group row">
-              <label class="col-md-4 col-form-label text-md-right"
-                >E-mail</label
-              >
-              <div class="col-md-6">
+    <div class="card card-register mx-auto mt-5 col-sm-5">
+      <div class="card-header">Cadastro</div>
+      <div class="card-body">
+        <div class="form-group">
+          <div class="form-label-group">
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              name="email"
+              v-model="data.email"
+              required
+              autocomplete="email"
+              placeholder="E-mail"
+            />
+            <label for="email">Email</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-label-group">
                 <input
-                  id="email"
-                  type="email"
-                  class="form-control"
-                  name="email"
-                  v-model="data.email"
-                  required
-                  autocomplete="email"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-4 col-form-label text-md-right">Senha</label>
-
-              <div class="col-md-6">
-                <input
+                  id="password"
                   type="password"
                   class="form-control"
                   name="password"
                   required
                   v-model="data.senha"
                   autocomplete="new-password"
+                  placeholder="Senha"
                 />
+                <label for="password">Senha</label>
               </div>
             </div>
-
-            <div class="form-group row">
-              <label class="col-md-4 col-form-label text-md-right"
-                >Confirmar Senha</label
-              >
-
-              <div class="col-md-6">
+            <div class="col-md-6">
+              <div class="form-label-group">
                 <input
+                  id="password_conf"
                   type="password"
                   class="form-control"
                   name="password_confirmation"
                   required
                   v-model="confSenha.valor"
                   autocomplete="new-password"
+                  placeholder="Confirmar Senha"
                 />
-              </div>
-            </div>
-
-            <div class="form-group row mb-0">
-              <div class="col-md-6 offset-md-4">
-                <button type="submit" class="btn btn-primary" @click="cadastro">
-                  Registrar
-                </button>
+                <label for="password_conf">Confirmar Senha</label>
               </div>
             </div>
           </div>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          @click="cadastro"
+        >
+          Cadastrar
+        </button>
+        <div class="text-center">
+          <router-link class="d-block mt-3" :to="{ name: 'login' }"
+            >Voltar</router-link
+          >
         </div>
       </div>
     </div>
