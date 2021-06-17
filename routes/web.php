@@ -19,3 +19,5 @@ Route::get('/', function () {
 
 Route::get('/{any}', [App\Http\Controllers\SpaController::class, 'index'])->where('any', '.*');
 Route::get('/login', [App\Http\Controllers\UsuarioController::class, 'index'])->name('home');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

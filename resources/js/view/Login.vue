@@ -51,7 +51,7 @@
                     class="form-check-input"
                     type="checkbox"
                     name="remember"
-                    id="remember"
+                    v-model="data.lembrar"
                   />
 
                   <label class="form-check-label" for="remember">
@@ -63,8 +63,14 @@
 
             <div class="form-group row mb-0">
               <div class="col-md-8 offset-md-4">
-                <button type="submit" class="btn btn-primary" @click="login">
-                  Login
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  @click="login"
+                  :disabled="estaLogando"
+                  :loading="estaLogando"
+                >
+                  {{ estaLogando ? "Logando..." : "Login" }}
                 </button>
 
                 <a class="btn btn-link" href="ESQUECEUASENHA">
@@ -85,8 +91,9 @@ export default {
       data: {
         email: "",
         senha: "",
+        lembrar: false,
       },
-      estalLogado: false,
+      estaLogando: false,
     };
   },
   methods: {
@@ -96,16 +103,22 @@ export default {
       if (this.data.senha.trim() == "") return this.erro("Senha é obrigatório");
       if (this.data.senha.length < 8)
         return this.erro("Senha precisa de 8 dígitos");
+      this.estaLogando = true;
       const res = await this.chamaApi("post", "api/usuario/login", this.data);
       if (res.status === 200) {
-        this.sucesso(res.data.msg);
+        this.info(res.data.msg);
       } else {
         if (res.status === 401) {
-          this.info(res.data.msg);
+          this.erro(res.data.msg);
+        } else if (res.status === 422) {
+          for (let i in res.data.errors) {
+            this.erro(res.data.errors[i][0]);
+          }
         } else {
           this.swr();
         }
       }
+      this.estaLogando = false;
     },
   },
 };

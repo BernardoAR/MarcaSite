@@ -64,8 +64,10 @@ class UsuarioController extends Controller
             'senha' => 'bail|required|min:8'
         ]);
         // Utiliza o auth para logar
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->lembrar)) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->senha], $request->lembrar)) {
+            return response()->json(['msg' => 'Você está logado'], 200);
         } else {
+            return response()->json(['msg' => 'Email ou senha incorretos'], 401);
         }
     }
     /**
