@@ -5,7 +5,7 @@
       title="Menu"
       bg-variant="dark"
       text-variant="light"
-      z-index="0"
+      z-index="1"
       shadow
     >
       <div class="px-3 py-2">
@@ -22,7 +22,7 @@
 
             <b-collapse id="navbar-toggle-collapse-curso" is-nav>
               <b-navbar-nav class="ml-auto">
-                <b-nav-item href="#">Adicionar</b-nav-item>
+                <b-nav-item :to="{ name: 'cursoCad' }">Adicionar</b-nav-item>
                 <b-nav-item href="#">Listar</b-nav-item>
               </b-navbar-nav>
             </b-collapse>
