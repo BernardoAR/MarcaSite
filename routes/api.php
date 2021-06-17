@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TipoContatoController;
 use App\Http\Controllers\TipoUsuarioController;
 use App\Http\Controllers\UsuarioController;
@@ -31,5 +32,4 @@ Route::prefix('/tipo-contato')->group(function () {
 // Prefixo para pegar cada parte de manipulação da api de dados
 Route::prefix('/usuario')->group(function () {
     Route::post('/store', [UsuarioController::class, 'store']);
-    Route::post('/login', [UsuarioController::class, 'login']);
 });
