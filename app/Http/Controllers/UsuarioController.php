@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
@@ -22,6 +23,7 @@ class UsuarioController extends Controller
         $usuario = new Usuario();
         $usuario->email = $request->email;
         $usuario->senha = bcrypt($request->senha);
+        $usuario->api_token = Str::random(60);
         $usuario->save();
     }
 

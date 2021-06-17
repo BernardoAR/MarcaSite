@@ -47,8 +47,7 @@
         </div>
         <div class="form-group">
           <div class="form-label-group">
-            <input
-              type="date"
+            <b-form-datepicker
               class="form-control"
               id="dataInicio"
               name="dataInicio"
@@ -61,13 +60,13 @@
         </div>
         <div class="form-group">
           <div class="form-label-group">
-            <input
+            <b-form-datepicker
               type="date"
               class="form-control"
               id="dataFim"
               name="dataFim"
               placeholder="Data de término das inscrições"
-              v-model="data.dataInicio"
+              v-model="data.dataFim"
               required
             />
             <label for="dataInicio">Data de término das inscrições:</label>
@@ -95,7 +94,7 @@
             drop-placeholder="Solte o arquivo aqui..."
           ></b-form-file>
         </div>
-        <button type="button" class="btn btn-primary" @click="teste">
+        <button type="button" class="btn btn-primary" @click="cadastra">
           Cadastrar
         </button>
       </div>
@@ -106,7 +105,6 @@
 export default {
   data: function () {
     return {
-      file: null,
       data: {
         quantidade: "",
         nomeCurso: "",
@@ -114,17 +112,54 @@ export default {
         dataInicio: "",
         dataFim: "",
         valor: "",
+        file: null,
       },
     };
   },
   methods: {
     onFileChange(e) {
-      this.file = e.target.files[0];
+      this.data.file = e.target.files[0];
+    },
+    limpaCampos() {
+      this.data.quantidade = "";
+      this.data.nomeCurso = "";
+      this.data.descricao = "";
+      this.data.dataInicio = "";
+      this.data.dataFim = "";
+      this.data.valor = "";
+      this.data.file = null;
     },
     async cadastra() {
-      let formData = new FormData();
-      formData.append("file", this.file);
-      await this.chamaApi("post", "/api/arquivo/upload", formData);
+      if (this.data.nomeCurso.trim() == "")
+        return this.erro("É obrigatório o nome do curso!");
+      if (this.data.descricao.trim() == "")
+        return this.erro("É obrigatório a descrição do curso!");
+      if (this.data.valor.trim() == "")
+        return this.erro("É necessário o valor do curso!");
+      if (this.data.dataInicio.trim() == "")
+        return this.erro("É necessário a data de início das inscrições!");
+      if (this.data.dataFim.trim() == "")
+        return this.erro("É necessário a data de fim das inscrições!");
+      if (this.data.quantidade.trim() == "")
+        return this.erro(
+          "É necessário estabelecer quantidade de inscritos máxima!"
+        );
+      let formData = this.objToFormData(this.data);
+      const res = await this.chamaApi("post", "/app/curso/store", formData);
+      if (res.status === 200) {
+        this.sucesso(res.data.msg);
+        this.limpaCampos();
+      } else {
+        if (res.status === 401) {
+          this.erro(res.data.msg);
+        } else if (res.status === 422) {
+          for (let i in res.data.errors) {
+            this.erro(res.data.errors[i][0]);
+          }
+        } else {
+          this.swr();
+        }
+      }
     },
   },
 };

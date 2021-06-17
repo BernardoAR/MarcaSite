@@ -19,7 +19,16 @@ Route::get('/', function () {
 });
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
 
-
+Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->group(function () {
+    Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
+    Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);
+    Route::prefix('/tipo-contato')->group(function () {
+        Route::post('/store', [TipoContatoController::class, 'store']);
+        Route::put('/{id}', [TipoContatoController::class, 'update']);
+        Route::delete('/{id}', [TipoContatoController::class, 'destroy']);
+    });
+    Route::post('/curso/store', [App\Http\Controllers\CursoController::class, 'store']);
+});
 // Prefixo para o login
 Route::prefix('/login')->group(function () {
     Route::post('/logar', [LoginController::class, 'logar']);

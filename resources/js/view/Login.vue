@@ -91,7 +91,7 @@ export default {
       const res = await this.chamaApi("post", "login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
-        window.location.href = "/";
+        window.location.href = "/home";
       } else {
         if (res.status === 401) {
           this.erro(res.data.msg);
