@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('spa');
 });
-
-
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
 
 
