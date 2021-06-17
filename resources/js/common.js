@@ -32,15 +32,14 @@ export default {
                 desc: desc
             });
         },
-        aviso(desc, titulo = "Ops!") {
+        aviso(desc, titulo = "Aviso!") {
             this.$Notice.warning({
                 title: titulo,
                 desc: desc
             });
         },
         erro(desc, titulo = "Erro!") {
-            console.log("Aqui");
-            this.$Notice.error({
+             this.$Notice.error({
                 title: titulo,
                 desc: desc
             });

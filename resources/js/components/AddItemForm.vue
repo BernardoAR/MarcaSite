@@ -15,7 +15,6 @@ export default {
     },
     methods: {
       addItem(){
-        console.log('Aqui2');
         if(this.tipoContato.titulo == ''){
           return;
         }
