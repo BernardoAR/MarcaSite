@@ -1,6 +1,6 @@
 import Login from "../view/Login.vue";
 import Cadastro from "../view/Cadastro.vue";
-import Home from "../view/Home.vue";
+import Home from "../view/App/Home.vue";
 const routes = [
     {
         path: "/",

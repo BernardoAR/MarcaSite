@@ -11,9 +11,54 @@
       <div class="px-3 py-2">
         <hr class="dropdown-divider" />
         <nav class="mb-3">
-          <b-nav vertical>
-            <b-nav-item href="#link-1"> <Icon type="md-cog" />Teste</b-nav-item>
-          </b-nav>
+          <b-navbar toggleable type="dark" variant="dark">
+            <b-navbar-brand href="#">Curso</b-navbar-brand>
+            <b-navbar-toggle target="navbar-toggle-collapse">
+              <template #default="{ expanded }">
+                <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
+                <b-icon v-else icon="chevron-bar-down"></b-icon>
+              </template>
+            </b-navbar-toggle>
+
+            <b-collapse id="navbar-toggle-collapse" is-nav>
+              <b-navbar-nav class="ml-auto">
+                <b-nav-item href="#">Adicionar</b-nav-item>
+                <b-nav-item href="#">Listar</b-nav-item>
+              </b-navbar-nav>
+            </b-collapse>
+          </b-navbar>
+          <b-navbar toggleable type="dark" variant="dark">
+            <b-navbar-brand href="#">Usuário</b-navbar-brand>
+            <b-navbar-toggle target="navbar-toggle-collapse">
+              <template #default="{ expanded }">
+                <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
+                <b-icon v-else icon="chevron-bar-down"></b-icon>
+              </template>
+            </b-navbar-toggle>
+
+            <b-collapse id="navbar-toggle-collapse" is-nav>
+              <b-navbar-nav class="ml-auto">
+                <b-nav-item href="#">Adicionar</b-nav-item>
+                <b-nav-item href="#">Listar</b-nav-item>
+              </b-navbar-nav>
+            </b-collapse>
+          </b-navbar>
+          <b-navbar toggleable type="dark" variant="dark">
+            <b-navbar-brand href="#">Inscrição</b-navbar-brand>
+            <b-navbar-toggle target="navbar-toggle-collapse">
+              <template #default="{ expanded }">
+                <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
+                <b-icon v-else icon="chevron-bar-down"></b-icon>
+              </template>
+            </b-navbar-toggle>
+
+            <b-collapse id="navbar-toggle-collapse" is-nav>
+              <b-navbar-nav class="ml-auto">
+                <b-nav-item href="#">Adicionar</b-nav-item>
+                <b-nav-item href="#">Listar</b-nav-item>
+              </b-navbar-nav>
+            </b-collapse>
+          </b-navbar>
         </nav>
       </div>
     </b-sidebar>
