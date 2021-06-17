@@ -51,7 +51,7 @@
           </div>
         </div>
         <button
-          type="butoon"
+          type="button"
           class="btn btn-primary"
           @click="login"
           :disabled="estaLogando"
@@ -91,7 +91,7 @@ export default {
       const res = await this.chamaApi("post", "login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
-        window.location("/");
+        window.location.href = "/";
       } else {
         if (res.status === 401) {
           this.erro(res.data.msg);

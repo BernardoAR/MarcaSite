@@ -1,60 +1,31 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container">
-      <router-link class="navbar-brand" :to="{ name: 'login' }">
-        MarcaSite</router-link
-      >
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="TOGGLE NAVIGATION"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <div>
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <b-button v-b-toggle.sidebar-1 class="bg-dark"
+        ><Icon type="ios-menu" />
+      </b-button>
+      <b-navbar-brand href="#" class="ml-3">MarcaSite</b-navbar-brand>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!-- Lado esquerdo da Navbar -->
-        <ul class="navbar-nav mr-auto"></ul>
-        <!-- Lado direito da Navbar-->
-        <ul class="navbar-nav ml-auto" v-if="$store.state.usuario">
-          <li class="nav-item dropdown">
-            <a
-              id="navbarDropdown"
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            ></a>
-            <div
-              class="dropdown-menu dropdown-menu-right"
-              aria-labelledby="navbarDropdown"
-            >
-              <a class="dropdown-item" href="/deslogar">Sair</a>
-            </div>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto" v-else>
-          <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'login' }"
-              >Login</router-link
-            >
-          </li>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-          <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'cadastro' }"
-              >Cadastro</router-link
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item href="#">Link</b-nav-item>
+        </b-navbar-nav>
+
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template #button-content>
+              <Icon type="md-cog" />
+            </template>
+            <b-dropdown-item href="#">Perfil</b-dropdown-item>
+            <b-dropdown-item href="/deslogar">Sair</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+  </div>
 </template>
 <script>
 export default {
