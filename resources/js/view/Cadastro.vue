@@ -89,7 +89,7 @@ export default {
       if (this.confSenha.valor != this.data.senha)
         return this.erro('Campo "Senha" e "Confirmar Senha" não coincidem');
 
-      const res = await this.chamaApi("post", "api/usuario/login", this.data);
+      const res = await this.chamaApi("post", "api/usuario/store", this.data);
       if (res.status === 200 || res.status === 201) {
         this.sucesso("Usuário cadastrado com sucesso!");
         this.$router.push({ name: "login" });
