@@ -14,6 +14,6 @@ class Usuario extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return ['value' => $this->id, 'text' => $this->nome];
     }
 }

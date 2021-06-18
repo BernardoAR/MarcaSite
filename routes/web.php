@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
 
 Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->group(function () {
+    Route::get('/usuarios', [App\Http\Controllers\UsuarioController::class, 'index']);
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
     Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);
     Route::prefix('/tipo-contato')->group(function () {
@@ -28,8 +29,11 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::delete('/{id}', [TipoContatoController::class, 'destroy']);
     });
     Route::prefix('/curso')->group(function () {
-        Route::get('/get', [App\Http\Controllers\CursoController::class, 'index']);
+        Route::get('/get', [App\Http\Controllers\CursoController::class, 'get']);
         Route::post('/store', [App\Http\Controllers\CursoController::class, 'store']);
+    });
+    Route::prefix('/tipo-usuario')->group(function () {
+        Route::get('/', [App\Http\Controllers\TipoUsuarioController::class, 'index']);
     });
 });
 // Prefixo para o login

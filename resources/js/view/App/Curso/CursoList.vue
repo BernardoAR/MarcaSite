@@ -1,5 +1,14 @@
 <template>
   <Table :loading="carregando" :columns="columns" :data="data">
+    <template slot-scope="{ row, index }" slot="id">
+      <Input
+        type="text"
+        v-model="valores.editID"
+        v-if="valores.editIndex === index"
+        readonly
+      />
+      <span v-else>{{ row.id }}</span>
+    </template>
     <template slot-scope="{ row, index }" slot="nome_curso">
       <Input
         type="text"
@@ -59,6 +68,7 @@
       </div>
       <div v-else>
         <Button @click="handleEdit(row, index)">Editar</Button>
+        <Button @click="inscrever(row, index)">Inscrever Usuário</Button>
       </div>
     </template>
   </Table>
@@ -69,6 +79,7 @@ export default {
     return {
       carregando: true,
       columns: [
+        { slot: "id", title: "ID" },
         { slot: "nome_curso", title: "Nome" },
         { slot: "quantidade", title: "Quantidade de Inscritos (Máx)" },
         { slot: "descricao", title: "Descrição" },
@@ -80,6 +91,7 @@ export default {
       data: [],
       valores: {
         editIndex: -1,
+        editID: "",
         editNomeCurso: "",
         editQuantidade: "",
         editDescricao: "",
@@ -93,11 +105,14 @@ export default {
     this.chamaApi("get", "/app/curso/get", []).then((response) => {
       this.data = response.data;
       this.carregando = false;
-      console.log(response.data);
     });
   },
   methods: {
+    inscrever(row, index) {
+      console.log("TODO AQUI");
+    },
     handleEdit(row, index) {
+      this.valores.editID = row.id;
       this.valores.editNomeCurso = row.nome_curso;
       this.valores.editQuantidade = row.quantidade;
       this.valores.editDescricao = row.descricao;
@@ -107,6 +122,7 @@ export default {
       this.valores.editIndex = index;
     },
     handleSave(index) {
+      this.data[index].id = this.valores.editID;
       this.data[index].nome_curso = this.valores.editNomeCurso;
       this.data[index].quantidade = this.valores.editQuantidade;
       this.data[index].descricao = this.valores.editDescricao;

@@ -16,7 +16,6 @@
               required
               autofocus
             />
-            <label for="email">E-mail</label>
           </div>
         </div>
         <div class="form-group">
@@ -31,7 +30,6 @@
               required
               autocomplete="current-password"
             />
-            <label for="password">Senha</label>
           </div>
         </div>
         <div class="form-group">

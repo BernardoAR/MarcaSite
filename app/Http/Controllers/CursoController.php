@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Curso as ResourcesCurso;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,16 +23,10 @@ class CursoController extends Controller
         return response()->json(Curso::orderBy('updated_at', 'DESC')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function get()
     {
-        //
+        return response()->json(ResourcesCurso::collection(Curso::where('data_inicio', '>=', date('Y-m-d'))->where('data_fim', '<=', date('Y-m-d'))->orderBy('updated_at', 'DESC')->get()));
     }
-
     /**
      * Store a newly created resource in storage.
      *

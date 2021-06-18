@@ -54,7 +54,9 @@
 
             <b-collapse id="navbar-toggle-collapse-inscricao" is-nav>
               <b-navbar-nav class="ml-auto">
-                <b-nav-item href="#">Adicionar</b-nav-item>
+                <b-nav-item :to="{ name: 'inscricaoCad' }"
+                  >Adicionar</b-nav-item
+                >
                 <b-nav-item href="#">Listar</b-nav-item>
               </b-navbar-nav>
             </b-collapse>

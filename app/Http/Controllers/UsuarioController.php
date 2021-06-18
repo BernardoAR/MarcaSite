@@ -8,6 +8,10 @@ use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
+    public function index()
+    {
+        return response()->json(Usuario::all());
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -18,11 +22,13 @@ class UsuarioController extends Controller
     {
         $this->validate($request, [
             'email' => 'bail|required|email|unique:usuarios',
-            'senha' => 'bail|required|min:8'
+            'senha' => 'bail|required|min:8',
+            'nome'  => 'bail|required'
         ]);
         $usuario = new Usuario();
         $usuario->email = $request->email;
         $usuario->senha = bcrypt($request->senha);
+        $usuario->nome = $request->nome;
         $usuario->api_token = Str::random(60);
         $usuario->cargo_usuarios_id = $request->cargo;
         $usuario->save();
