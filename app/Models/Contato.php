@@ -9,7 +9,7 @@ class Contato extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'DDD',
+        'ddd',
         'numero',
         'tipo_contatos_id'
     ];

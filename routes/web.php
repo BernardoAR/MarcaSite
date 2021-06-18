@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
 
 Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->group(function () {
+    Route::post('/inscricao/store', [App\Http\Controllers\InscricaoController::class, 'store']);
     Route::get('/usuarios', [App\Http\Controllers\UsuarioController::class, 'index']);
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
     Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);

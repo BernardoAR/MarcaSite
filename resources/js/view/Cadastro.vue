@@ -83,7 +83,7 @@
           :disabled="estaCadastrando"
           :loading="estaCadastrando"
         >
-          {{ estaLogando ? "Cadastrando..." : "Cadastrar" }}
+          {{ estaCadastrando ? "Cadastrando..." : "Cadastrar" }}
         </button>
         <div class="text-center">
           <router-link class="d-block mt-3" :to="{ name: 'login' }"

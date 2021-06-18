@@ -16,7 +16,7 @@ class CreateDadosUsuariosTable extends Migration
         Schema::create('dados_usuarios', function (Blueprint $table) {
             $table->id();
             $table->char('CPF', 11);
-            $table->string('empresa');
+            $table->string('empresa')->nullable();
             $table->unsignedBigInteger('enderecos_id')->nullable();
             $table->tinyInteger('tipo_usuarios_id')->unsigned()->nullable();
             $table->unsignedBigInteger('usuarios_id');
