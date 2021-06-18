@@ -5,7 +5,7 @@
       title="Menu"
       bg-variant="dark"
       text-variant="light"
-      z-index="1"
+      z-index="6"
       shadow
     >
       <div class="px-3 py-2">

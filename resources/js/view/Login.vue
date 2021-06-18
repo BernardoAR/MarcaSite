@@ -88,7 +88,7 @@ export default {
       if (this.data.senha.length < 8)
         return this.erro("Senha precisa de 8 dígitos");
       this.estaLogando = true;
-      const res = await this.chamaApi("post", "login/logar", this.data);
+      const res = await this.chamaApi("post", "/login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
         window.location.href = "/home";

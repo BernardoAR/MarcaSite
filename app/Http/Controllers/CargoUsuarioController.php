@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CargoUsuario as ResourcesCargoUsuario;
 use App\Models\CargoUsuario;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class CargoUsuarioController extends Controller
      */
     public function index()
     {
-        return CargoUsuario::orderBy('titulo', 'ASC')->get();
+        return response()->json(ResourcesCargoUsuario::collection(CargoUsuario::orderBy('titulo', 'ASC')->get()));
     }
 
     /**

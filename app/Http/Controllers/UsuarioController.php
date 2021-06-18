@@ -24,6 +24,7 @@ class UsuarioController extends Controller
         $usuario->email = $request->email;
         $usuario->senha = bcrypt($request->senha);
         $usuario->api_token = Str::random(60);
+        $usuario->cargo_usuarios_id = $request->cargo;
         $usuario->save();
     }
 
