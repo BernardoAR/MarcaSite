@@ -56,7 +56,7 @@
 
       <template slot-scope="{ row, index }" slot="uf">
         <Input
-          type="number"
+          type="text"
           v-model="valores.editUf"
           v-if="valores.editIndex === index"
         />
@@ -64,11 +64,12 @@
       </template>
 
       <template slot-scope="{ row, index }" slot="status">
-        <Input
-          type="number"
+        <b-form-select
           v-model="valores.editStatus"
+          :options="options"
           v-if="valores.editIndex === index"
-        />
+        >
+        </b-form-select>
         <span v-else>{{ row.status }}</span>
       </template>
 
@@ -115,6 +116,7 @@ const doc = new jsPDF();
 export default {
   data() {
     return {
+      options: null,
       carregando: true,
       fields: [
         "inscrito",
@@ -180,6 +182,9 @@ export default {
       this.data = response.data;
       this.carregando = false;
       this.adicionaCamposDataPDF(response.data);
+    });
+    this.chamaApi("get", "/app/status", []).then((response) => {
+      this.options = response.data;
     });
   },
   methods: {

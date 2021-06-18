@@ -10,6 +10,9 @@ class Status extends Model
     use HasFactory;
     protected $table = 'status';
     protected $filleable = [
-        'titulo',
+        'titulo'
+    ];
+    protected $hidden = [
+        'created_at', 'updated_at'
     ];
 }

@@ -26,7 +26,7 @@ class InscricaoController extends Controller
             ->join('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
             ->join('tipo_usuarios', 'tipo_usuarios.id', '=', 'dados_usuarios.tipo_usuarios_id')
             ->join('status', 'inscricoes.status_id', '=', 'status.id')
-            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['usuarios.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.titulo AS status', 'cursos.valor AS total']));
+            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['inscricoes.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.titulo AS status', 'cursos.valor AS total']));
     }
 
     /**
@@ -42,7 +42,7 @@ class InscricaoController extends Controller
             $idUsuario = $this->requestsUsuario($request, $request->id);
             $idEndereco = $this->requestsEndereco($request, $request->endereco['id']);
             $idDadosUsuario =  $this->requestsDadosUsuario($request, $idUsuario, $idEndereco);
-            $this->requestsContato($request, $idUsuario, $idDadosUsuario);
+            $this->requestsContato($request, $idDadosUsuario);
             $this->requestsInscricao($request, $idUsuario);
             DB::commit();
             return response()->json(['msg' => 'Inscrição cadastrada com sucesso!'], 200);
@@ -102,7 +102,7 @@ class InscricaoController extends Controller
     /**
      * Método utilizado para a inserção de um novo contato
      *
-     * @param [type] $id id do dadosusuario
+     * @param int $id id do dadosusuario
      * @return void
      */
     public function novoContato($request, $telefoneAdicionado, $celularAdicionado, $id)
@@ -115,6 +115,7 @@ class InscricaoController extends Controller
             $contato->tipo_contatos_id = 2;
             $contato->save();
             $dadosUsuarioContatos = new DadosUsuarioContato();
+            print_r($id);
             $dadosUsuarioContatos->dados_usuarios_id = $id;
             $dadosUsuarioContatos->contatos_id = $contato->id;
             $dadosUsuarioContatos->save();

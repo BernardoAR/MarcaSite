@@ -24,6 +24,7 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::post('/store', [App\Http\Controllers\InscricaoController::class, 'store']);
         Route::get('/get', [App\Http\Controllers\InscricaoController::class, 'getInscricaoList']);
     });
+    Route::get('/status', [App\Http\Controllers\StatusController::class, 'index']);
     Route::get('/usuarios', [App\Http\Controllers\UsuarioController::class, 'index']);
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
     Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);

@@ -14,6 +14,7 @@ class CreateInscricoesTable extends Migration
     public function up()
     {
         Schema::create('inscricoes', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('usuarios_id');
             $table->unsignedBigInteger('cursos_id');
             $table->tinyInteger('status_id')->unsigned()->nullable();
@@ -21,7 +22,6 @@ class CreateInscricoesTable extends Migration
             $table->foreign('cursos_id')->references('id')->on('cursos')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('status_id')->references('id')->on('status')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
-            $table->primary(array('usuarios_id', 'cursos_id'));
         });
     }
 
