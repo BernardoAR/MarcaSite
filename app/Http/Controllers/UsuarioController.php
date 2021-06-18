@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Usuario as ResourcesUsuario;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -10,7 +11,7 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        return response()->json(Usuario::all());
+        return response()->json(ResourcesUsuario::collection(Usuario::all()));
     }
     /**
      * Store a newly created resource in storage.

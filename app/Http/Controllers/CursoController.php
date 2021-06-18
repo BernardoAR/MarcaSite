@@ -22,10 +22,14 @@ class CursoController extends Controller
     {
         return response()->json(Curso::orderBy('updated_at', 'DESC')->get());
     }
-
+    /**
+     * Método utilizado para pegar uma coleção de array para dropdowns
+     *
+     * @return void
+     */
     public function get()
     {
-        return response()->json(ResourcesCurso::collection(Curso::where('data_inicio', '>=', date('Y-m-d'))->where('data_fim', '<=', date('Y-m-d'))->orderBy('updated_at', 'DESC')->get()));
+        return response()->json(ResourcesCurso::collection(Curso::where('data_inicio', '<=', date('Y-m-d'))->where('data_fim', '>=', date('Y-m-d'))->orderBy('updated_at', 'DESC')->get()));
     }
     /**
      * Store a newly created resource in storage.

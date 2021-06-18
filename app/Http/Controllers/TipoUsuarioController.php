@@ -15,7 +15,7 @@ class TipoUsuarioController extends Controller
      */
     public function index()
     {
-        return ResourcesTipoUsuario::collection(TipoUsuario::all());
+        return response()->json(ResourcesTipoUsuario::collection(TipoUsuario::all()));
     }
 
     /**

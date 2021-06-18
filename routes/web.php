@@ -33,7 +33,7 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::post('/store', [App\Http\Controllers\CursoController::class, 'store']);
     });
     Route::prefix('/tipo-usuario')->group(function () {
-        Route::get('/', [App\Http\Controllers\TipoUsuarioController::class, 'index']);
+        Route::get('/get', [App\Http\Controllers\TipoUsuarioController::class, 'index']);
     });
 });
 // Prefixo para o login

@@ -14,7 +14,7 @@
             <b-form-select v-model="data.id" :options="optionsUsuario">
               <template #first>
                 <b-form-select-option :value="null"
-                  >Novo Usuário</b-form-select-option
+                  >-- Novo Usuário --</b-form-select-option
                 >
               </template>
             </b-form-select>

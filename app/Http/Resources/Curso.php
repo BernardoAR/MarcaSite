@@ -14,6 +14,6 @@ class Curso extends JsonResource
      */
     public function toArray($request)
     {
-        return ['value' => $this->id, 'text' => $this->nome];
+        return ['value' => $this->id, 'text' => $this->nome_curso];
     }
 }

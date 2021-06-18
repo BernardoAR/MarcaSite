@@ -14,6 +14,6 @@ class TipoUsuario extends JsonResource
      */
     public function toArray($request)
     {
-        return ['id' => $this->id, 'titulo' => $this->titulo];
+        return ['value' => $this->id, 'text' => $this->titulo];
     }
 }
