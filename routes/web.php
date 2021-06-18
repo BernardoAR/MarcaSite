@@ -27,7 +27,10 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::put('/{id}', [TipoContatoController::class, 'update']);
         Route::delete('/{id}', [TipoContatoController::class, 'destroy']);
     });
-    Route::post('/curso/store', [App\Http\Controllers\CursoController::class, 'store']);
+    Route::prefix('/curso')->group(function () {
+        Route::get('/get', [App\Http\Controllers\CursoController::class, 'index']);
+        Route::post('/store', [App\Http\Controllers\CursoController::class, 'store']);
+    });
 });
 // Prefixo para o login
 Route::prefix('/login')->group(function () {

@@ -19,7 +19,7 @@ class CursoController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Curso::orderBy('updated_at', 'DESC')->get());
     }
 
     /**
