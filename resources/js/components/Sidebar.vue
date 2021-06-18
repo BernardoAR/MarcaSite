@@ -57,7 +57,7 @@
                 <b-nav-item :to="{ name: 'inscricaoCad' }"
                   >Adicionar</b-nav-item
                 >
-                <b-nav-item href="#">Listar</b-nav-item>
+                <b-nav-item :to="{ name: 'inscricaoList' }">Listar</b-nav-item>
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>

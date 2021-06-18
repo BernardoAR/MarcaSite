@@ -15,13 +15,18 @@ use Illuminate\Support\Str;
 class InscricaoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Método utilizado para pegar a list especifica
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getInscricaoList()
     {
-        //
+        return response()->json(Inscricao::join('usuarios', 'inscricoes.usuarios_id', '=', 'usuarios.id')
+            ->join('dados_usuarios', 'inscricoes.usuarios_id', '=', 'dados_usuarios.usuarios_id')
+            ->join('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
+            ->join('tipo_usuarios', 'tipo_usuarios.id', '=', 'dados_usuarios.tipo_usuarios_id')
+            ->join('status', 'inscricoes.status_id', '=', 'status.id')
+            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['usuarios.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.titulo AS status', 'cursos.valor AS total']));
     }
 
     /**

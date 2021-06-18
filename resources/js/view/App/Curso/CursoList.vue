@@ -68,7 +68,6 @@
       </div>
       <div v-else>
         <Button @click="handleEdit(row, index)">Editar</Button>
-        <Button @click="inscrever(row, index)">Inscrever Usuário</Button>
       </div>
     </template>
   </Table>
@@ -102,15 +101,12 @@ export default {
     };
   },
   async created() {
-    this.chamaApi("get", "/app/curso/get", []).then((response) => {
+    this.chamaApi("get", "/app/curso/", []).then((response) => {
       this.data = response.data;
       this.carregando = false;
     });
   },
   methods: {
-    inscrever(row, index) {
-      console.log("TODO AQUI");
-    },
     handleEdit(row, index) {
       this.valores.editID = row.id;
       this.valores.editNomeCurso = row.nome_curso;
