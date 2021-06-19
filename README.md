@@ -40,7 +40,7 @@ Após a finalização, serão necessárias as atualizações do pacote npm, send
 
 `./vendor/bin/sail npm install`
 
-Existe o arquivo chamado .env.example, modifique o DB_DATABASE, USERNAME E PASSWORD a gosto, e renomeie o .env.example para .env
+Existe o arquivo chamado .env.example, modifique o DB_DATABASE, USERNAME E PASSWORD a gosto.
 Exemplo de conexão utilizada:
 ```
 DB_CONNECTION=mysql
