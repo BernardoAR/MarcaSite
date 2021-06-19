@@ -14,4 +14,7 @@ class Inscricao extends Model
         'cursos_id',
         'status_id'
     ];
+    protected $casts = [
+        'data_inscricao' => 'datetime:Y-m-d'
+    ];
 }

@@ -16,4 +16,8 @@ class Curso extends Model
         'data_fim',
         'valor'
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }

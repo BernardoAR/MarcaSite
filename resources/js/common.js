@@ -8,6 +8,14 @@ export default {
         return {};
     },
     methods: {
+        // Método para transformar o obj em formData
+        objToFormData(dataObj) {
+            let formData = new FormData();
+            for (let i in dataObj) {
+                formData.append(`${i}`, dataObj[i]);
+            }
+            return formData;
+        },
         // Método genérico para a chamada de apis
         async chamaApi(metodo, url, dataObj) {
             try {
@@ -39,7 +47,7 @@ export default {
             });
         },
         erro(desc, titulo = "Erro!") {
-             this.$Notice.error({
+            this.$Notice.error({
                 title: titulo,
                 desc: desc
             });

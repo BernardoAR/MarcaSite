@@ -17,7 +17,8 @@ class ChecaLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
+        // Checa por api e por web
+        if (!Auth::guard('api')->check() && !Auth::check()) {
             return response()->json(['msg' => 'Acesso Negado.'], 403);
         }
         return $next($request);

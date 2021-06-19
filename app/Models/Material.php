@@ -9,5 +9,5 @@ class Material extends Model
 {
     use HasFactory;
     protected $table = 'materiais';
-    protected $filleable = ['arquivo'];
+    protected $filleable = ['nome', 'caminho'];
 }

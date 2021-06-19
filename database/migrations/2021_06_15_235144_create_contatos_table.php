@@ -15,7 +15,7 @@ class CreateContatosTable extends Migration
     {
         Schema::create('contatos', function (Blueprint $table) {
             $table->id();
-            $table->char('DDD', 2);
+            $table->char('ddd', 2);
             $table->string('numero', 9);
             $table->tinyInteger('tipo_contatos_id')->unsigned();
             $table->foreign('tipo_contatos_id')->references('id')->on('tipo_contatos')->cascadeOnUpdate();

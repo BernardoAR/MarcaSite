@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="card card-login mx-auto mt-5 col-sm-5">
+    <div class="card card-login mx-auto mt-5 col-md-5">
       <div class="card-header">Login</div>
       <div class="card-body">
         <div class="form-group">
@@ -16,7 +16,6 @@
               required
               autofocus
             />
-            <label for="email">E-mail</label>
           </div>
         </div>
         <div class="form-group">
@@ -31,7 +30,6 @@
               required
               autocomplete="current-password"
             />
-            <label for="password">Senha</label>
           </div>
         </div>
         <div class="form-group">
@@ -88,10 +86,10 @@ export default {
       if (this.data.senha.length < 8)
         return this.erro("Senha precisa de 8 dígitos");
       this.estaLogando = true;
-      const res = await this.chamaApi("post", "login/logar", this.data);
+      const res = await this.chamaApi("post", "/login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
-        window.location.href = "/";
+        window.location.href = "/home";
       } else {
         if (res.status === 401) {
           this.erro(res.data.msg);
