@@ -16,7 +16,14 @@ class DadosUsuarioController extends Controller
     {
         //
     }
-
+    /**
+     * Método utilizado para
+     * @param int $id do usuário
+     * @return void
+     */
+    public function getUsuarioDados($id)
+    {
+    }
     /**
      * Show the form for creating a new resource.
      *

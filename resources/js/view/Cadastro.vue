@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="card card-register mx-auto mt-5 col-sm-5">
+    <div class="card card-register mx-auto mt-5 col-md-5">
       <div class="card-header">Cadastro</div>
       <div class="card-body">
         <div class="form-group">

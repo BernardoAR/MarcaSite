@@ -11,7 +11,11 @@
       <b-collapse id="accordion-usuario" role="tabpanel" visible>
         <b-card-body>
           <div class="form-group">
-            <b-form-select v-model="data.id" :options="optionsUsuario">
+            <b-form-select
+              v-model="data.id"
+              v-on:change="atualizaCampos"
+              :options="optionsUsuario"
+            >
               <template #first>
                 <b-form-select-option :value="null"
                   >-- Novo Usuário --</b-form-select-option
@@ -273,7 +277,7 @@
                 class="form-control"
                 id="telefone"
                 name="telefone"
-                placeholder="Telefone"
+                placeholder="Celular"
                 min="8"
                 max="9"
                 required
@@ -322,6 +326,15 @@ export default {
       this.chamaApi("get", "/app/tipo-usuario/get", []).then((response) => {
         this.optionsTipoUsuario = response.data;
       });
+    },
+    atualizaCampos(id) {
+      if (id != null) {
+        this.chamaApi("get", `/app/dados-usuario/get/${id}`, []).then(
+          (response) => {
+            this.data = response.data;
+          }
+        );
+      }
     },
     async cadastro() {
       if (this.data.usuario.nome.trim() == "")

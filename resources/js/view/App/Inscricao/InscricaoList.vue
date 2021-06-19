@@ -70,7 +70,7 @@
           v-if="valores.editIndex === index"
         >
         </b-form-select>
-        <span v-else>{{ row.status }}</span>
+        <span v-else>{{ retornaTitulo(row.status) }}</span>
       </template>
 
       <template slot-scope="{ row, index }" slot="total">
@@ -89,6 +89,7 @@
         </div>
         <div v-else>
           <Button @click="handleEdit(row, index)">Editar</Button>
+          <Button @click="handleDelete(row, index)">Deletar</Button>
         </div>
       </template>
     </Table>
@@ -150,14 +151,38 @@ export default {
         "Total",
       ],
       columns: [
-        { slot: "id", title: "ID" },
+        {
+          slot: "id",
+          title: "ID",
+        },
         { slot: "inscrito", title: "Inscrito" },
         { slot: "data_inscricao", title: "Data de inscrição" },
         { slot: "categoria", title: "Categoria" },
         { slot: "cpf", title: "CPF" },
         { slot: "email", title: "E-mail" },
         { slot: "uf", title: "UF" },
-        { slot: "status", title: "Status" },
+        {
+          slot: "status",
+          title: "Status",
+          filters: [
+            {
+              label: "Cancelados",
+              value: 1,
+            },
+            {
+              label: "Aguardando Pagamento",
+              value: 2,
+            },
+            {
+              label: "Pagos",
+              value: 3,
+            },
+          ],
+          filterMultiple: false,
+          filterMethod(value, row) {
+            return row.status == value;
+          },
+        },
         { slot: "total", title: "Total" },
         { slot: "action", title: "Ações" },
       ],
@@ -202,6 +227,9 @@ export default {
         this.dataPDF.push(dado);
       }
     },
+    retornaTitulo(id) {
+      return this.options[id - 1].text;
+    },
     handleEdit(row, index) {
       this.valores.editID = row.id;
       this.valores.editInscrito = row.inscrito;
@@ -213,6 +241,15 @@ export default {
       this.valores.editStatus = row.status;
       this.valores.editTotal = row.total;
       this.valores.editIndex = index;
+    },
+    async handleDelete(row, index) {
+      const res = await this.chamaApi("delete", `/app/inscricao/${row.id}`, []);
+      if (res.status === 200 || res.status === 201) {
+        this.sucesso("Deletado com sucesso!");
+        delete this.data[index];
+      } else {
+        this.erro("Não foi possível deletar! Tente novamente mais tarde.");
+      }
     },
     handleSave(index) {
       this.data[index].id = this.valores.editID;

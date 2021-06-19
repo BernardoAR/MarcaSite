@@ -26,7 +26,7 @@ class InscricaoController extends Controller
             ->join('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
             ->join('tipo_usuarios', 'tipo_usuarios.id', '=', 'dados_usuarios.tipo_usuarios_id')
             ->join('status', 'inscricoes.status_id', '=', 'status.id')
-            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['inscricoes.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.titulo AS status', 'cursos.valor AS total']));
+            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['inscricoes.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.id AS status', 'cursos.valor AS total']));
     }
 
     /**
@@ -86,13 +86,13 @@ class InscricaoController extends Controller
             foreach ($contatos as $contato) {
                 if ($contato->tipo_contatos_id == 1) {
                     $celularAdicionado = true;
-                    $contato->ddd = $request->contato->celular['ddd'];
-                    $contato->numero = $request->contato->celular['numero'];
+                    $contato->ddd = $request->contato['celular']['ddd'];
+                    $contato->numero = $request->contato['celular']['numero'];
                     $contato->save();
                 } else {
                     $telefoneAdicionado = true;
-                    $contato->ddd = $request->contato->telefone['ddd'];
-                    $contato->numero = $request->contato->telefone['numero'];
+                    $contato->ddd = $request->contato['telefone']['ddd'];
+                    $contato->numero = $request->contato['telefone']['numero'];
                     $contato->save();
                 }
             }
@@ -227,8 +227,13 @@ class InscricaoController extends Controller
      * @param  \App\Models\Inscricao  $inscricao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inscricao $inscricao)
+    public function destroy($id)
     {
-        //
+        $inscricao = Inscricao::find($id);
+        if ($inscricao) {
+            $inscricao->delete();
+            return response()->json('Tipo de Contato deletado com sucesso.', 200);
+        }
+        return response()->json('Tipo de Contato não encontrado.', 500);
     }
 }
