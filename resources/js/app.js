@@ -15,7 +15,6 @@ import "view-design/dist/styles/iview.css";
 import common from "./common";
 import store from "./store";
 import JsonCSV from "vue-json-csv";
-
 Vue.component("downloadCsv", JsonCSV);
 // Usando com o Vue
 Vue.use(BootstrapVue);

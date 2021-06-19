@@ -5,6 +5,7 @@ import CursoCad from "../view/App/Curso/CursoCad.vue";
 import CursoList from "../view/App/Curso/CursoList.vue";
 import InscricaoCad from "../view/App/Inscricao/InscricaoCad.vue";
 import InscricaoList from "../view/App/Inscricao/InscricaoList.vue";
+import UsuarioCad from "../view/App/Usuario/UsuarioCad.vue";
 const routes = [
     {
         path: "/",
@@ -40,6 +41,11 @@ const routes = [
         path: "/inscricao/list",
         name: "inscricaoList",
         component: InscricaoList
+    },
+    {
+        path: "/usuario/cad",
+        name: "usuarioCad",
+        component: UsuarioCad
     }
 ];
 export default routes;
