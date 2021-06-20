@@ -82,7 +82,6 @@ export default {
   data() {
     return {
       linha: null,
-      filter: "",
       carregando: false,
       colunas: [
         { text: "ID", value: "id" },

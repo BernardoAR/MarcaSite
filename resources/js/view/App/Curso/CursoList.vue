@@ -1,131 +1,83 @@
 <template>
-  <Table :loading="carregando" :columns="columns" :data="data">
-    <template slot-scope="{ row, index }" slot="id">
-      <Input
-        type="text"
-        v-model="valores.editID"
-        v-if="valores.editIndex === index"
-        readonly
-      />
-      <span v-else>{{ row.id }}</span>
-    </template>
-    <template slot-scope="{ row, index }" slot="nome_curso">
-      <Input
-        type="text"
-        v-model="valores.editNomeCurso"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.nome_curso }}</span>
-    </template>
-    <template slot-scope="{ row, index }" slot="quantidade">
-      <Input
-        type="text"
-        v-model="valores.editQuantidade"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.quantidade }}</span>
-    </template>
-    <template slot-scope="{ row, index }" slot="descricao">
-      <Input
-        type="text"
-        v-model="valores.editDescricao"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.descricao }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="data_inicio">
-      <Input
-        type="text"
-        v-model="valores.editDataInicio"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.data_inicio }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="data_fim">
-      <Input
-        type="text"
-        v-model="valores.editDataFim"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.data_fim }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="valor">
-      <Input
-        type="number"
-        v-model="valores.editValor"
-        v-if="valores.editIndex === index"
-      />
-      <span v-else>{{ row.valor }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="action">
-      <div v-if="valores.editIndex === index">
-        <Button @click="handleSave(index)">Salvar</Button>
-        <Button @click="valores.editIndex = -1">Cancelar</Button>
-      </div>
-      <div v-else>
-        <Button @click="handleEdit(row, index)">Editar</Button>
-      </div>
-    </template>
-  </Table>
+  <div>
+    <modal
+      titulo="Deletar Usuário"
+      texto="Deseja realmente excluir este curso?"
+      ok="Sim"
+      cancelar="Cancelar"
+      @click-ok="deletaCurso"
+    ></modal>
+    <v-data-table
+      :headers="colunas"
+      :items="data"
+      :loading="carregando"
+      loading-text="Carregando..."
+    >
+      <template v-slot:item="row">
+        <tr>
+          <td>{{ row.item.id }}</td>
+          <td>{{ row.item.nome_curso }}</td>
+          <td>{{ row.item.quantidade }}</td>
+          <td>{{ row.item.descricao }}</td>
+          <td>{{ row.item.data_inicio }}</td>
+          <td>{{ row.item.data_fim }}</td>
+          <td>{{ row.item.valor }}</td>
+          <td>
+            <b-button
+              size="sm"
+              class="mb-2"
+              variant="outline-primary"
+              @click="$router.push(`/usuario/edit/${row.item.id}`)"
+            >
+              <b-icon icon="pencil" aria-hidden="true"></b-icon>
+            </b-button>
+            <b-button
+              size="sm"
+              class="mb-2"
+              variant="outline-primary"
+              @click="excluirClicado(row)"
+            >
+              <b-icon icon="trash" aria-hidden="true"></b-icon>
+            </b-button>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 <script>
+import Modal from "../../../components/Modal.vue";
 export default {
+  components: { Modal },
   data() {
     return {
+      linha: null,
       carregando: true,
-      columns: [
-        { slot: "id", title: "ID" },
-        { slot: "nome_curso", title: "Nome" },
-        { slot: "quantidade", title: "Quantidade de Inscritos (Máx)" },
-        { slot: "descricao", title: "Descrição" },
-        { slot: "data_inicio", title: "Data Inicial (Inscrição)" },
-        { slot: "data_fim", title: "Data Final (Inscrição)" },
-        { slot: "valor", title: "Valor" },
-        { slot: "action", title: "Ações" },
+      colunas: [
+        { value: "id", text: "ID" },
+        { value: "nome_curso", text: "Nome" },
+        { value: "quantidade", text: "Quantidade de Inscritos (Máx)" },
+        { value: "descricao", text: "Descrição" },
+        { value: "data_inicio", text: "Data Inicial (Inscrição)" },
+        { value: "data_fim", text: "Data Final (Inscrição)" },
+        { value: "valor", text: "Valor" },
+        { value: "action", text: "Ações" },
       ],
       data: [],
-      valores: {
-        editIndex: -1,
-        editID: "",
-        editNomeCurso: "",
-        editQuantidade: "",
-        editDescricao: "",
-        editDataInicio: "",
-        editDataFim: "",
-        editValor: "",
-      },
     };
   },
   async created() {
+    this.carregando = true;
     this.chamaApi("get", "/app/curso/", []).then((response) => {
       this.data = response.data;
       this.carregando = false;
     });
   },
   methods: {
-    handleEdit(row, index) {
-      this.valores.editID = row.id;
-      this.valores.editNomeCurso = row.nome_curso;
-      this.valores.editQuantidade = row.quantidade;
-      this.valores.editDescricao = row.descricao;
-      this.valores.editDataInicio = row.data_inicio;
-      this.valores.editDataFim = row.data_fim;
-      this.valores.editValor = row.valor;
-      this.valores.editIndex = index;
-    },
-    handleSave(index) {
-      this.data[index].id = this.valores.editID;
-      this.data[index].nome_curso = this.valores.editNomeCurso;
-      this.data[index].quantidade = this.valores.editQuantidade;
-      this.data[index].descricao = this.valores.editDescricao;
-      this.data[index].data_inicio = this.valores.editDataInicio;
-      this.data[index].data_fim = this.valores.editDataFim;
-      this.data[index].valor = this.valores.editValor;
-      this.valores.editIndex = -1;
+    async deletaCurso() {},
+    excluirClicado(row) {
+      this.linha = row;
+      this.$bvModal.show("modal");
     },
   },
 };
