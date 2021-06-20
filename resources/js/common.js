@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import validacaoValor from "./validacao";
 /**
  * JS para configurações comuns que todo o JS pode precisar.
  */
@@ -27,6 +27,25 @@ export default {
             } catch (e) {
                 return e.response;
             }
+        },
+        validacao(valores, validacao) {
+            let erros = [];
+            Object.entries(validacao).map(function(obj) {
+                let split = obj[1].split("|");
+                for (let i in split) {
+                    let erro = validacaoValor(
+                        valores[`${obj[0]}`],
+                        split[i],
+                        obj[0]
+                    );
+                    // Verifica se retornou o valor, se retornou, já manda a mensagem
+                    if (!erro.resultado) {
+                        erros.push(erro.mensagem);
+                        break;
+                    }
+                }
+            });
+            return erros;
         },
         info(desc, titulo = "Informação") {
             this.$Notice.info({
