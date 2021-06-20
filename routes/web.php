@@ -18,7 +18,6 @@ Route::get('/', function () {
     return view('spa');
 });
 Route::get('/deslogar', [App\Http\Controllers\LoginController::class, 'deslogar']);
-
 Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->group(function () {
     Route::prefix('/inscricao')->group(function () {
         Route::post('/store', [App\Http\Controllers\InscricaoController::class, 'store']);
@@ -26,7 +25,11 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::delete('/{id}', [App\Http\Controllers\InscricaoController::class, 'destroy']);
     });
     Route::get('/status', [App\Http\Controllers\StatusController::class, 'index']);
-    Route::get('/usuarios', [App\Http\Controllers\UsuarioController::class, 'index']);
+    Route::prefix('/usuarios')->group(function () {
+        Route::get('/', [App\Http\Controllers\UsuarioController::class, 'index']);
+        Route::get('/get/{id}', [App\Http\Controllers\UsuarioController::class, 'getUsuarioDados']);
+        Route::post('/store', [App\Http\Controllers\UsuarioController::class, 'storeUpdateUsuarioDados']);
+    });
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
     Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);
     Route::prefix('/tipo-contato')->group(function () {

@@ -33,11 +33,7 @@ export default {
             Object.entries(validacao).map(function(obj) {
                 let split = obj[1].split("|");
                 for (let i in split) {
-                    let erro = validacaoValor(
-                        valores[`${obj[0]}`],
-                        split[i],
-                        obj[0]
-                    );
+                    let erro = validacaoValor(valores, split[i], obj[0]);
                     // Verifica se retornou o valor, se retornou, já manda a mensagem
                     if (!erro.resultado) {
                         erros.push(erro.mensagem);

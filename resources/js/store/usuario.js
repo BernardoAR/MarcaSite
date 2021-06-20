@@ -4,16 +4,14 @@ export default {
     state: {
         id: null,
         email: "",
-        empresa: "",
-        cargo: null,
+        tipo: null,
         nome: "",
         senha: "",
         confSenha: "",
-        dadosUsuarioForm: {
-            id: "",
+        dadosUsuario: {
             cpf: "",
             empresa: "",
-            tipoUsuario: null
+            profissao: null
         }
     },
     getters: {

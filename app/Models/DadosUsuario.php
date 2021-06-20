@@ -15,4 +15,7 @@ class DadosUsuario extends Model
         'tipo_usuarios_id',
         'usuarios_id'
     ];
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
 }

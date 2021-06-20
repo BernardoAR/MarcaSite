@@ -11,6 +11,15 @@
       <b-collapse id="accordion-usuario" role="tabpanel" visible>
         <b-card-body>
           <div class="form-group">
+            <b-form-select v-model="data.curso" :options="optionsCurso">
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >-- Curso --</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </div>
+          <div class="form-group">
             <b-form-select
               v-model="data.id"
               v-on:change="atualizaCampos"
@@ -110,13 +119,15 @@
               </b-form-select>
             </div>
             <div class="form-label-group col-sm-6">
-              <b-form-select v-model="data.curso" :options="optionsCurso">
-                <template #first>
-                  <b-form-select-option :value="null" disabled
-                    >-- Curso --</b-form-select-option
-                  >
-                </template>
-              </b-form-select>
+              <input
+                v-model="data.usuario.dadosUsuario.cpf"
+                type="number"
+                class="form-control"
+                id="cpf"
+                name="cpf"
+                placeholder="CPF"
+                required
+              />
             </div>
           </div>
         </b-card-body>
@@ -200,19 +211,6 @@
                 id="cep"
                 name="cep"
                 placeholder="CEP"
-                required
-              />
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="form-label-group col-sm-6">
-              <input
-                v-model="data.usuario.dadosUsuario.cpf"
-                type="number"
-                class="form-control"
-                id="cpf"
-                name="cpf"
-                placeholder="CPF"
                 required
               />
             </div>
