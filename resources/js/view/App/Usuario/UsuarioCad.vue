@@ -1,12 +1,11 @@
 <template>
   <div>
     <usuario :desabilitar="desabilitarSenha" ref="usuario"></usuario>
-    <button
+    <b-button
       type="submit"
       @click="cadastro"
       :disabled="estaCadastrando"
       :loading="estaCadastrando"
-      class="btn btn-primary"
     >
       {{
         update
@@ -17,7 +16,7 @@
           ? "Cadastrando..."
           : "Cadastrar"
       }}
-    </button>
+    </b-button>
   </div>
 </template>
 <script>
@@ -86,7 +85,6 @@ export default {
       console.log(this.$store.state.usuarioForm);
     },
   },
-
   components: { Usuario },
   data() {
     return { desabilitarSenha: false, update: false, estaCadastrando: false };

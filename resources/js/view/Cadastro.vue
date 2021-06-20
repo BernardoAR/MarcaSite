@@ -76,15 +76,14 @@
             </template>
           </b-form-select>
         </div>
-        <button
-          type="submit"
-          class="btn btn-primary btn-block"
+        <b-button
           @click="cadastro"
           :disabled="estaCadastrando"
           :loading="estaCadastrando"
+          variant="primary"
         >
           {{ estaCadastrando ? "Cadastrando..." : "Cadastrar" }}
-        </button>
+        </b-button>
         <div class="text-center">
           <router-link class="d-block mt-3" :to="{ path: 'login' }"
             >Voltar</router-link

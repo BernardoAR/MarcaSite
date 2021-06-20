@@ -10,47 +10,58 @@ import UsuarioList from "../view/App/Usuario/UsuarioList.vue";
 const routes = [
     {
         path: "/",
-        component: Login
+        component: Login,
+        meta: { precisaLogin: false }
     },
     {
         path: "/login",
-        component: Login
+        component: Login,
+        meta: { precisaLogin: false }
     },
     {
         path: "/cadastro",
-        component: Cadastro
+        component: Cadastro,
+        meta: { precisaLogin: true }
     },
     {
         path: "/home",
-        component: Home
+        component: Home,
+        meta: { precisaLogin: true }
     },
     {
         path: "/curso/cad",
-        component: CursoCad
+        component: CursoCad,
+        meta: { precisaLogin: true }
     },
     {
         path: "/curso/list",
-        component: CursoList
+        component: CursoList,
+        meta: { precisaLogin: true }
     },
     {
         path: "/inscricao/cad",
-        component: InscricaoCad
+        component: InscricaoCad,
+        meta: { precisaLogin: true }
     },
     {
         path: "/inscricao/list",
-        component: InscricaoList
+        component: InscricaoList,
+        meta: { precisaLogin: true }
     },
     {
         path: "/usuario/cad",
-        component: UsuarioCad
+        component: UsuarioCad,
+        meta: { precisaLogin: true }
     },
     {
-        path: "/usuario/edit/:idP",
-        component: UsuarioCad
+        path: "/usuario/edit/:id",
+        component: UsuarioCad,
+        meta: { precisaLogin: true }
     },
     {
         path: "/usuario/list",
-        component: UsuarioList
+        component: UsuarioList,
+        meta: { precisaLogin: true }
     }
 ];
 export default routes;

@@ -10,8 +10,9 @@ const { getField, updateField } = createHelpers({
 });
 export default new Vuex.Store({
     state: {
-        user: false,
-        possuiErroForm: false
+        possuiErroForm: false,
+        usuario: false,
+        autenticado: false
     },
     modules: {
         usuarioForm: Usuario

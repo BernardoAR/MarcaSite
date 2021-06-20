@@ -22,7 +22,7 @@
               <Icon type="md-cog" />
             </template>
             <b-dropdown-item href="#">Perfil</b-dropdown-item>
-            <b-dropdown-item href="/deslogar">Sair</b-dropdown-item>
+            <b-dropdown-item @click="deslogar">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -31,6 +31,12 @@
 </template>
 <script>
 export default {
+  methods: {
+    deslogar() {
+      localStorage.setItem("autenticado", false);
+      window.location.href = "/deslogar";
+    },
+  },
   data: function () {
     return { estaLogado: false };
   },

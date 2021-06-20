@@ -29,7 +29,20 @@ const router = new VueRouter({
     base: process.env.BASE_URL,
     routes
 });
-
+// Faz as rotas que possuem meta, redirecionar corretamente
+router.beforeEach((to, from, next) => {
+    let autenticado = localStorage.getItem("autenticado");
+    if (to.matched.some(record => record.meta.precisaLogin) && !autenticado) {
+        next("/login");
+    } else if (
+        to.matched.some(record => !record.meta.precisaLogin) &&
+        autenticado
+    ) {
+        next("/home");
+    } else {
+        next();
+    }
+});
 Vue.component("app", require("./view/App.vue").default);
 
 const app = new Vue({

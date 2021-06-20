@@ -94,9 +94,7 @@
             drop-placeholder="Solte o arquivo aqui..."
           ></b-form-file>
         </div>
-        <button type="button" class="btn btn-primary" @click="cadastra">
-          Cadastrar
-        </button>
+        <b-button @click="cadastra" variant="primary"> Cadastrar </b-button>
       </div>
     </div>
   </div>

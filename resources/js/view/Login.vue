@@ -48,15 +48,14 @@
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary"
+        <b-button
           @click="login"
           :disabled="estaLogando"
           :loading="estaLogando"
+          variant="primary"
         >
           {{ estaLogando ? "Logando..." : "Login" }}
-        </button>
+        </b-button>
         <div class="text-center">
           <router-link class="d-block mt-3" :to="{ path: '/cadastro' }"
             >Cadastre-se</router-link
@@ -89,6 +88,7 @@ export default {
       const res = await this.chamaApi("post", "/login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
+        localStorage.setItem("autenticado", true);
         window.location.href = "/home";
       } else {
         if (res.status === 401) {
