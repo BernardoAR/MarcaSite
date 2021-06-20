@@ -4,7 +4,7 @@
       <b-button v-b-toggle.sidebar-1 class="bg-dark"
         ><Icon type="ios-menu" />
       </b-button>
-      <b-navbar-brand :to="{ name: 'home' }" class="ml-3"
+      <b-navbar-brand :to="{ path: '/home' }" class="ml-3"
         >MarcaSite</b-navbar-brand
       >
 

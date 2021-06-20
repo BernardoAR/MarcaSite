@@ -24,14 +24,15 @@
 import Usuario from "../../../components/App/Usuario.vue";
 
 export default {
+  created() {
+    if (this.$route.params.id != null) {
+      this.atualiza(this.$route.params.id);
+    }
+  },
   watch: {
     "$store.state.usuarioForm.id": function (novoVal, antVal) {
       if (novoVal !== null) {
-        this.update = true;
-        this.desabilitarSenha = true;
-        this.chamaApi("get", `/app/usuarios/get/${novoVal}`, []).then(
-          (response) => this.atualizaCampos(response.data)
-        );
+        this.atualiza(novoVal);
       } else {
         this.update = false;
         this.$refs.usuario.limpaCampos();
@@ -40,7 +41,13 @@ export default {
     },
   },
   methods: {
-    valida() {},
+    atualiza(id) {
+      this.update = true;
+      this.desabilitarSenha = true;
+      this.chamaApi("get", `/app/usuarios/get/${id}`, []).then((response) =>
+        this.atualizaCampos(response.data)
+      );
+    },
     async cadastro() {
       this.$store.state.possuiErroForm = false;
       this.$refs.usuario.valida();
@@ -54,6 +61,7 @@ export default {
           let texto = this.update ? "atualizado" : "cadastrado";
           this.sucesso(`Usuário ${texto} com sucesso!`);
           this.limpaCampos();
+          this.$router.push({ path: "/usuario/list" });
         } else {
           if (res.status == 422) {
             this.estaCadastrando = false;

@@ -6,46 +6,51 @@ import CursoList from "../view/App/Curso/CursoList.vue";
 import InscricaoCad from "../view/App/Inscricao/InscricaoCad.vue";
 import InscricaoList from "../view/App/Inscricao/InscricaoList.vue";
 import UsuarioCad from "../view/App/Usuario/UsuarioCad.vue";
+import UsuarioList from "../view/App/Usuario/UsuarioList.vue";
 const routes = [
     {
         path: "/",
-        name: "login",
+        component: Login
+    },
+    {
+        path: "/login",
         component: Login
     },
     {
         path: "/cadastro",
-        name: "cadastro",
         component: Cadastro
     },
     {
         path: "/home",
-        name: "home",
         component: Home
     },
     {
         path: "/curso/cad",
-        name: "cursoCad",
         component: CursoCad
     },
     {
         path: "/curso/list",
-        name: "cursoList",
         component: CursoList
     },
     {
         path: "/inscricao/cad",
-        name: "inscricaoCad",
         component: InscricaoCad
     },
     {
         path: "/inscricao/list",
-        name: "inscricaoList",
         component: InscricaoList
     },
     {
         path: "/usuario/cad",
-        name: "usuarioCad",
         component: UsuarioCad
+    },
+    {
+        path: "/usuario/edit/:idP",
+        component: UsuarioCad
+    },
+    {
+        path: "/usuario/list",
+        component: UsuarioList
     }
 ];
 export default routes;

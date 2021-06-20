@@ -157,7 +157,7 @@ export default {
         dados.tipo_usuarios_id ?? null;
     },
     limpaCampos() {
-      this.$store.state.usuarioForm.id = "";
+      this.$store.state.usuarioForm.id = null;
       this.$store.state.usuarioForm.email = "";
       this.$store.state.usuarioForm.tipo = null;
       this.$store.state.usuarioForm.nome = "";

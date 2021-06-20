@@ -23,17 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/cargo-usuario', [App\Http\Controllers\CargoUsuarioController::class, 'index']);
-// Middleware para ter acesso apenas quando logado
-Route::prefix('/app')->middleware([ChecaLogin::class])->group(function () {
-    Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
-    Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);
-    Route::prefix('/tipo-contato')->group(function () {
-        Route::post('/store', [TipoContatoController::class, 'store']);
-        Route::put('/{id}', [TipoContatoController::class, 'update']);
-        Route::delete('/{id}', [TipoContatoController::class, 'destroy']);
-    });
-    Route::post('/curso/store', [CursoController::class, 'store']);
-});
 Route::prefix('/usuario')->group(function () {
     Route::post('/store', [UsuarioController::class, 'store']);
 });

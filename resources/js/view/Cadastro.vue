@@ -86,7 +86,7 @@
           {{ estaCadastrando ? "Cadastrando..." : "Cadastrar" }}
         </button>
         <div class="text-center">
-          <router-link class="d-block mt-3" :to="{ name: 'login' }"
+          <router-link class="d-block mt-3" :to="{ path: 'login' }"
             >Voltar</router-link
           >
         </div>
@@ -131,7 +131,7 @@ export default {
       const res = await this.chamaApi("post", "api/usuario/store", this.data);
       if (res.status === 200 || res.status === 201) {
         this.sucesso("Usuário cadastrado com sucesso!");
-        this.$router.push({ name: "login" });
+        this.$router.push({ path: "login" });
       } else {
         if (res.status == 422) {
           for (let i in res.data.errors) {

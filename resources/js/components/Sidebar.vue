@@ -22,8 +22,8 @@
 
             <b-collapse id="navbar-toggle-collapse-curso" is-nav>
               <b-navbar-nav class="ml-auto">
-                <b-nav-item :to="{ name: 'cursoCad' }">Adicionar</b-nav-item>
-                <b-nav-item :to="{ name: 'cursoList' }">Listar</b-nav-item>
+                <b-nav-item :to="{ path: '/curso/cad' }">Adicionar</b-nav-item>
+                <b-nav-item :to="{ path: '/curso/list' }">Listar</b-nav-item>
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>
@@ -38,8 +38,10 @@
 
             <b-collapse id="navbar-toggle-collapse-usuario" is-nav>
               <b-navbar-nav class="ml-auto">
-                <b-nav-item :to="{ name: 'usuarioCad' }">Adicionar</b-nav-item>
-                <b-nav-item href="#">Listar</b-nav-item>
+                <b-nav-item :to="{ path: '/usuario/cad' }"
+                  >Adicionar</b-nav-item
+                >
+                <b-nav-item :to="{ path: '/usuario/list' }">Listar</b-nav-item>
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>
@@ -54,10 +56,12 @@
 
             <b-collapse id="navbar-toggle-collapse-inscricao" is-nav>
               <b-navbar-nav class="ml-auto">
-                <b-nav-item :to="{ name: 'inscricaoCad' }"
+                <b-nav-item :to="{ path: '/inscricao/cad' }"
                   >Adicionar</b-nav-item
                 >
-                <b-nav-item :to="{ name: 'inscricaoList' }">Listar</b-nav-item>
+                <b-nav-item :to="{ path: '/inscricao/list' }"
+                  >Listar</b-nav-item
+                >
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>

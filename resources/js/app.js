@@ -1,5 +1,4 @@
 require("./bootstrap");
-
 window.Vue = require("vue").default;
 // Bootstrap
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
@@ -15,6 +14,7 @@ import "view-design/dist/styles/iview.css";
 import common from "./common";
 import store from "./store";
 import JsonCSV from "vue-json-csv";
+import vuetify from "./vuetify";
 Vue.component("downloadCsv", JsonCSV);
 // Usando com o Vue
 Vue.use(BootstrapVue);
@@ -36,5 +36,6 @@ const app = new Vue({
     el: "#app",
     components: { App },
     router,
-    store
+    store,
+    vuetify
 });

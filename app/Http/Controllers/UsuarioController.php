@@ -16,6 +16,15 @@ class UsuarioController extends Controller
         return response()->json(ResourcesUsuario::collection(Usuario::all()));
     }
     /**
+     * Método utilizado para pegar todos os usuários
+     *
+     * @return void
+     */
+    public function getAll()
+    {
+        return response()->json(Usuario::join('cargo_usuarios', 'cargo_usuarios.id', '=', 'usuarios.cargo_usuarios_id')->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'cargo_usuarios.titulo AS tipo']));
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,7 +53,7 @@ class UsuarioController extends Controller
      */
     public function getUsuarioDados($id)
     {
-        return response()->json(Usuario::leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')->where('usuarios.id', $id)->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.cpf', 'dados_usuarios.tipo_usuarios_id'])->first());
+        return response()->json(Usuario::leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')->where('usuarios.id', $id)->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.tipo_usuarios_id'])->first());
     }
     /**
      * Método utilizado para gravar dados, tanto no Usuário quanto no DadosUsuario, feito por um cadastro de usuário
@@ -113,26 +122,20 @@ class UsuarioController extends Controller
         $usuario->save();
         return $usuario->id;
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Usuario  $usuario
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Usuario $usuario)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove o usuário
      *
-     * @param  \App\Models\Usuario  $usuario
+     * @param int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Usuario $usuario)
+    public function destroy($id)
     {
-        //
+        $usuario = Usuario::find($id);
+        if ($usuario) {
+            $usuario->delete();
+            return response()->json('Usuário deletado com sucesso.');
+        }
+        return response()->json('Usuário não encontrado.', 500);
     }
 }

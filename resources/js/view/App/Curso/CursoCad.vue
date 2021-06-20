@@ -148,7 +148,7 @@ export default {
       const res = await this.chamaApi("post", "/app/curso/store", formData);
       if (res.status === 200) {
         this.sucesso(res.data.msg);
-        this.$router.push({ name: "cursoList" });
+        this.$router.push({ path: "/curso/list" });
       } else {
         if (res.status === 401) {
           this.erro(res.data.msg);

@@ -58,7 +58,7 @@
           {{ estaLogando ? "Logando..." : "Login" }}
         </button>
         <div class="text-center">
-          <router-link class="d-block mt-3" :to="{ name: 'cadastro' }"
+          <router-link class="d-block mt-3" :to="{ path: '/cadastro' }"
             >Cadastre-se</router-link
           >
         </div>
