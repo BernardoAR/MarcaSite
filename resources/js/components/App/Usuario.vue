@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="form-group">
-      <b-form-select v-model="id" :options="optionsUsuario">
+      <b-form-select
+        v-model="id"
+        :options="optionsUsuario"
+        v-on:change="usuarioChange"
+      >
         <template #first>
           <b-form-select-option :value="null"
             >-- Novo Usuário --</b-form-select-option
@@ -93,6 +97,9 @@ export default {
   },
   props: ["desabilitar"],
   methods: {
+    usuarioChange(id) {
+      this.$emit("usuario-mudou", id);
+    },
     formatCPF(cpf) {
       let x = this.regexCPF(cpf);
       let p4 = x[4] ? `-${x[4]}` : "";
@@ -105,7 +112,7 @@ export default {
         .replace(/\D/g, "")
         .match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
     },
-    valida() {
+    validaUsuario() {
       let erros = [];
       this.$store.state.usuarioForm.dadosUsuario.cpf = this.regexCPF(
         this.$store.state.usuarioForm.dadosUsuario.cpf
@@ -136,7 +143,7 @@ export default {
         this.erro(valor);
       });
     },
-    atualizaCampos(dados) {
+    atualizaUsuario(dados) {
       this.$store.state.usuarioForm.id = dados.id;
       this.$store.state.usuarioForm.email = dados.email;
       this.$store.state.usuarioForm.tipo = dados.cargo_usuarios_id;
@@ -147,7 +154,7 @@ export default {
       this.$store.state.usuarioForm.dadosUsuario.profissao =
         dados.tipo_usuarios_id ?? null;
     },
-    limpaCampos() {
+    limpaUsuario() {
       this.$store.state.usuarioForm.id = null;
       this.$store.state.usuarioForm.email = "";
       this.$store.state.usuarioForm.tipo = null;
@@ -175,7 +182,7 @@ export default {
     },
   },
   unmounted() {
-    this.limpaCampos();
+    this.limpaUsuario();
   },
   computed: {
     ...mapFields({

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <usuario :desabilitar="desabilitarSenha" ref="usuario"></usuario>
+    <usuario
+      :desabilitar="desabilitarSenha"
+      ref="usuario"
+      @usuario-mudou="usuarioMudado"
+    ></usuario>
     <b-button
       variant="outline-primary"
       type="submit"
@@ -30,21 +34,16 @@ export default {
       this.atualiza(this.$route.params.id);
     }
   },
-  unmounted() {
-    this.limpaCampos();
-  },
-  watch: {
-    "$store.state.usuarioForm.id": function (novoVal, antVal) {
-      if (novoVal !== null) {
-        this.atualiza(novoVal);
+  methods: {
+    usuarioMudado(id) {
+      if (id !== null) {
+        this.atualiza(id);
       } else {
         this.update = false;
-        this.$refs.usuario.limpaCampos();
+        this.$refs.usuario.limpaUsuario();
         this.desabilitarSenha = false;
       }
     },
-  },
-  methods: {
     atualiza(id) {
       this.update = true;
       this.desabilitarSenha = true;
@@ -54,11 +53,11 @@ export default {
     },
     async cadastro() {
       this.$store.state.possuiErroForm = false;
-      this.$refs.usuario.valida();
+      this.$refs.usuario.validaUsuario();
       if (!this.$store.state.possuiErroForm) {
         const res = await this.chamaApi(
           "post",
-          `/app/usuarios/storeUpdate`,
+          `/app/usuarios/store-update`,
           this.$store.state.usuarioForm
         );
         if (res.status === 200 || res.status === 201) {
@@ -81,10 +80,10 @@ export default {
       }
     },
     atualizaCampos(dados) {
-      this.$refs.usuario.atualizaCampos(dados);
+      this.$refs.usuario.atualizaUsuario(dados);
     },
     limpaCampos() {
-      this.$refs.usuario.limpaCampos();
+      this.$refs.usuario.limpaUsuario();
     },
   },
   components: { Usuario },

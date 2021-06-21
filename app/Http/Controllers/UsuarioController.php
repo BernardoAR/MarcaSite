@@ -11,6 +11,12 @@ use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
+
+    /**
+     * Método utilizado para pegar o usuário
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         return response()->json(ResourcesUsuario::collection(Usuario::all()));
@@ -18,11 +24,24 @@ class UsuarioController extends Controller
     /**
      * Método utilizado para pegar todos os usuários
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function getAll()
     {
         return response()->json(Usuario::join('cargo_usuarios', 'cargo_usuarios.id', '=', 'usuarios.cargo_usuarios_id')->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'cargo_usuarios.titulo AS tipo']));
+    }
+    /**
+     * Método utilizado para pegar os dados de usuário em relação a todos os dados necessários da inscrição
+     *
+     * @return void
+     */
+    public function getUsuarioInscricao($id)
+    {
+        return response()->json(Usuario::leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')
+            ->leftJoin('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
+            ->leftJoin('dados_usuario_contatos', 'dados_usuario_contatos.dados_usuarios_id', '=', 'dados_usuarios.id')
+            ->leftJoin('contatos', 'contatos.id', '=', 'dados_usuario_contatos.contatos_id')->where('usuarios.id', $id)
+            ->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.tipo_usuarios_id', 'enderecos.id AS id_endereco', 'enderecos.logradouro', 'enderecos.numero', 'enderecos.uf', 'enderecos.cep', 'enderecos.cidade', 'enderecos.complemento'])->first());
     }
     /**
      * Método utilizado para pegar os dados do usuário, junto com

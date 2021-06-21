@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="form-group">
+      <b-form-select v-model="curso" :options="optionsCurso">
+        <template #first>
+          <b-form-select-option :value="null">-- Curso --</b-form-select-option>
+        </template>
+      </b-form-select>
+    </div>
     <b-card no-body class="mb-1">
       <b-button
         block
@@ -10,7 +17,11 @@
       >
       <b-collapse id="accordion-usuario" role="tabpanel" visible>
         <b-card-body
-          ><usuario :desabilitar="desabilitarSenha" ref="usuario"></usuario>
+          ><usuario
+            :desabilitar="desabilitarSenha"
+            ref="usuario"
+            @usuario-mudou="usuarioMudou"
+          ></usuario>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -66,53 +77,59 @@ export default {
   components: { Contato, Endereco, Usuario },
   async created() {
     this.getCursos();
+    this.$store.state.usuarioForm.id = null;
   },
-  watch: {
-    "$store.state.usuarioForm.id": function (novoVal, antVal) {
-      if (novoVal !== null) {
-        this.atualiza(novoVal);
+  methods: {
+    usuarioMudou(id) {
+      if (id !== null) {
+        this.atualiza(id);
       } else {
         this.update = false;
-        this.$refs.usuario.limpaCampos();
+        this.$refs.usuario.limpaUsuario();
         this.desabilitarSenha = false;
       }
     },
-  },
-  methods: {
-    atualiza(id) {
-      this.update = true;
+    async atualiza(id) {
       this.desabilitarSenha = true;
-      this.chamaApi("get", `/app/usuarios/get/${id}`, []).then((response) =>
-        this.atualizaCampos(response.data)
+      this.atualizarCampos([]);
+      const res = await this.chamaApi(
+        "get",
+        `/app/usuarios/get-usuario-inscricao/${id}`,
+        []
       );
+      if (res.status == 200 || res.status == 201) {
+        this.atualizarCampos(res.data);
+      }
     },
     async getCursos() {
       this.chamaApi("get", "/app/curso/get", []).then((response) => {
         this.optionsCurso = response.data;
       });
     },
-    atualizaCampos(dados) {
-      this.$refs.usuario.atualizaCampos(dados);
-      this.$refs.endereco.atualizaCampos(dados);
-      this.$refs.contato.atualizaCampos(dados);
+    atualizarCampos(dados) {
+      this.$refs.usuario.atualizaUsuario(dados);
+      this.$refs.endereco.atualizaEndereco(dados);
+      this.$refs.contato.atualizaContato(dados);
     },
     limpaCampos() {
-      this.$refs.usuario.limpaCampos();
-      this.$refs.endereco.limpaCampos();
-      this.$refs.contato.limpaCampos();
+      this.$refs.usuario.limpaUsuario();
+      this.$refs.endereco.limpaEndereco();
+      this.$refs.contato.limpaContato();
     },
     async cadastro() {
       this.$store.state.possuiErroForm = false;
-      this.$refs.usuario.valida();
-      this.$refs.endereco.valida();
+      this.$refs.usuario.validaUsuario();
+      this.$refs.endereco.validaEndereco();
+      this.$refs.contato.validaContato();
       this.estaCadastrando = true;
 
       if (!this.$store.state.possuiErroForm) {
-        const res = await this.chamaApi(
-          "post",
-          "/app/inscricao/store",
-          this.data
-        );
+        const res = await this.chamaApi("post", "/app/inscricao/store", {
+          curso: this.curso,
+          usuario: this.$store.state.usuarioForm,
+          endereco: this.$store.state.enderecoForm,
+          contato: this.$store.state.contatoForm,
+        });
         if (res.status === 200 || res.status === 201) {
           let texto = this.update ? "atualizadoa" : "cadastrada";
           this.sucesso(`Inscrição ${texto} com sucesso!`);
@@ -134,8 +151,12 @@ export default {
       this.estaCadastrando = false;
     },
   },
+  unmounted() {
+    this.limpaCampos();
+  },
   data: function () {
     return {
+      curso: null,
       desabilitarSenha: false,
       update: false,
       optionsCurso: null,

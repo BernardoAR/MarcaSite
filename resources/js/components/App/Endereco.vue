@@ -75,17 +75,17 @@ export default {
       let p2 = x[2] ? `-${x[2]}` : "";
       return `${x[1]}${p2}`;
     },
-    valida() {
+    validaEndereco() {
       let erros = [];
       // Valida a parte do usuarioForm
-      this.$store.state.enderecoForm.cep = this.regexCPF(
+      this.$store.state.enderecoForm.cep = this.regexCEP(
         this.$store.state.enderecoForm.cep
       )[0];
       erros = this.validacao(this.$store.state.enderecoForm, {
         logradouro: "required",
         numero: "required",
         cidade: "required",
-        uf: "required|minLength:2| maxLength:2",
+        uf: "required|minLength:2|maxLength:2",
         cep: "required|minLength:8|maxLength:8",
       });
       erros.map((valor) => {
@@ -93,7 +93,8 @@ export default {
         this.erro(valor);
       });
     },
-    atualizaCampos(dados) {
+    atualizaEndereco(dados) {
+      this.$store.state.enderecoForm.id = dados.id_endereco;
       this.$store.state.enderecoForm.logradouro = dados.logradouro;
       this.$store.state.enderecoForm.numero = dados.numero;
       this.$store.state.enderecoForm.cidade = dados.cidade;
@@ -101,7 +102,8 @@ export default {
       this.$store.state.enderecoForm.complemento = dados.complemento;
       this.$store.state.enderecoForm.cep = this.formatCEP(dados.cep);
     },
-    limpaCampos() {
+    limpaEndereco() {
+      this.$store.state.enderecoForm.id = "";
       this.$store.state.enderecoForm.logradouro = "";
       this.$store.state.enderecoForm.numero = "";
       this.$store.state.enderecoForm.cidade = "";
@@ -111,10 +113,11 @@ export default {
     },
   },
   unmounted() {
-    this.limpaCampos();
+    this.limpaEndereco();
   },
   computed: {
     ...mapFields({
+      id: "id",
       logradouro: "logradouro",
       numero: "numero",
       cidade: "cidade",

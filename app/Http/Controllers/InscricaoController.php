@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class InscricaoController extends Controller
 {
     /**
-     * Método utilizado para pegar a list especifica
+     * Método utilizado para pegar a lista de inscrição
      *
      * @return \Illuminate\Http\Response
      */
@@ -28,7 +28,20 @@ class InscricaoController extends Controller
             ->join('status', 'inscricoes.status_id', '=', 'status.id')
             ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->get(['inscricoes.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.id AS status', 'cursos.valor AS total']));
     }
-
+    /**
+     * Método utilizado para pegar a lista de inscrição, especificamente
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function get($id)
+    {
+        return response()->json(Inscricao::join('usuarios', 'inscricoes.usuarios_id', '=', 'usuarios.id')
+            ->join('dados_usuarios', 'inscricoes.usuarios_id', '=', 'dados_usuarios.usuarios_id')
+            ->join('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
+            ->join('tipo_usuarios', 'tipo_usuarios.id', '=', 'dados_usuarios.tipo_usuarios_id')
+            ->join('status', 'inscricoes.status_id', '=', 'status.id')
+            ->join('cursos', 'inscricoes.cursos_id', '=', 'cursos.id')->where('usuarios.id', $id)->get(['inscricoes.id', 'usuarios.nome AS inscrito', 'inscricoes.created_at AS data_inscricao', 'tipo_usuarios.titulo AS categoria', 'dados_usuarios.cpf', 'usuarios.email', 'enderecos.uf', 'status.id AS status', 'cursos.valor AS total'])->first());
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -39,9 +52,9 @@ class InscricaoController extends Controller
     {
         try {
             DB::beginTransaction();
-            $idUsuario = $this->requestsUsuario($request, $request->id);
+            $idUsuario = $this->requestsUsuario($request, $request->usuario['id']);
             $idEndereco = $this->requestsEndereco($request, $request->endereco['id']);
-            $idDadosUsuario =  $this->requestsDadosUsuario($request, $idUsuario, $idEndereco);
+            $idDadosUsuario =  $this->requestsDadosUsuario($request->usuario, $idUsuario, $idEndereco);
             $this->requestsContato($request, $idDadosUsuario);
             $this->requestsInscricao($request, $idUsuario);
             DB::commit();
@@ -60,12 +73,14 @@ class InscricaoController extends Controller
      */
     private function requestsUsuario($request, $id)
     {
+
         $usuario = (empty($id)) ? new Usuario() : Usuario::find($id);
         $usuario->nome = $request->usuario['nome'];
         $usuario->email = $request->usuario['email'];
         $usuario->api_token = Str::random(60);
-        if (!empty($request->usuario['senha'])) {
-            $usuario->senha = bcrypt($request->usuario['senha']);
+        // Se o usuáro for vazio, cadastrará a senha
+        if (empty($id)) {
+            $usuario->senha = bcrypt($usuario->senha);
         }
         $usuario->save();
         return $usuario->id;
@@ -86,13 +101,11 @@ class InscricaoController extends Controller
             foreach ($contatos as $contato) {
                 if ($contato->tipo_contatos_id == 1) {
                     $celularAdicionado = true;
-                    $contato->ddd = $request->contato['celular']['ddd'];
-                    $contato->numero = $request->contato['celular']['numero'];
+                    $contato->numero = $request->contato['celular'];
                     $contato->save();
                 } else {
                     $telefoneAdicionado = true;
-                    $contato->ddd = $request->contato['telefone']['ddd'];
-                    $contato->numero = $request->contato['telefone']['numero'];
+                    $contato->numero = $request->contato['telefone'];
                     $contato->save();
                 }
             }
@@ -110,12 +123,10 @@ class InscricaoController extends Controller
         if (!$telefoneAdicionado) {
             $celularAdicionado = true;
             $contato = new Contato();
-            $contato->ddd = $request->contato['telefone']['ddd'];
-            $contato->numero = $request->contato['telefone']['numero'];
+            $contato->numero = $request->contato['telefone'];
             $contato->tipo_contatos_id = 2;
             $contato->save();
             $dadosUsuarioContatos = new DadosUsuarioContato();
-            print_r($id);
             $dadosUsuarioContatos->dados_usuarios_id = $id;
             $dadosUsuarioContatos->contatos_id = $contato->id;
             $dadosUsuarioContatos->save();
@@ -123,8 +134,7 @@ class InscricaoController extends Controller
         if (!$celularAdicionado) {
             $celularAdicionado = true;
             $contato = new Contato();
-            $contato->ddd = $request->contato['celular']['ddd'];
-            $contato->numero = $request->contato['celular']['numero'];
+            $contato->numero = $request->contato['celular'];
             $contato->tipo_contatos_id = 1;
             $contato->save();
             $dadosUsuarioContatos = new DadosUsuarioContato();
@@ -171,7 +181,7 @@ class InscricaoController extends Controller
     /**
      * Método utilizado para criar ou atualizar o usuario
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request->usuario
      * @param  int  $idUsuario id do usuario
      * @param  int  $idEndereco id do endereço
      * @return void
@@ -179,9 +189,9 @@ class InscricaoController extends Controller
     private function requestsDadosUsuario($request, $idUsuario, $idEndereco)
     {
         $dadosUsuario = (DadosUsuario::where('usuarios_id', $idUsuario)->first() ?? new DadosUsuario());
-        $dadosUsuario->cpf = $request->usuario['dadosUsuario']['cpf'];
-        $dadosUsuario->empresa = $request->usuario['dadosUsuario']['empresa'];
-        $dadosUsuario->tipo_usuarios_id = $request->usuario['dadosUsuario']['tipoUsuario'];
+        $dadosUsuario->cpf = $request['dadosUsuario']['cpf'];
+        $dadosUsuario->empresa = $request['dadosUsuario']['empresa'];
+        $dadosUsuario->tipo_usuarios_id = $request['dadosUsuario']['profissao'];
         $dadosUsuario->usuarios_id = $idUsuario;
         $dadosUsuario->enderecos_id = $idEndereco;
         $dadosUsuario->save();

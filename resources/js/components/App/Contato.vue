@@ -31,9 +31,12 @@ const { mapFields } = createHelpers({
 });
 export default {
   methods: {
-    valida() {
-      this.$store.state.enderecoForm.cep = this.regexContato(
-        this.$store.state.enderecoForm.cep
+    validaContato() {
+      this.$store.state.contatoForm.telefone = this.regexContato(
+        this.$store.state.contatoForm.telefone
+      )[0];
+      this.$store.state.contatoForm.celular = this.regexContato(
+        this.$store.state.contatoForm.celular
       )[0];
     },
     regexContato(contato) {
@@ -53,19 +56,19 @@ export default {
           : "";
       return !x[2] ? x[1] : `(${x[1]}) ${x[2]}${p}`;
     },
-    atualizaCampos(dados) {
+    atualizaContato(dados) {
       this.$store.state.contatoForm.telefone = this.formatContato(
         dados.telefone
       );
       this.$store.state.contatoForm.celular = this.formatContato(dados.celular);
     },
-    limpaCampos() {
+    limpaContato() {
       this.$store.state.contatoForm.telefone = "";
       this.$store.state.contatoForm.celular = "";
     },
   },
   unmounted() {
-    this.limpaCampos();
+    this.limpaContato();
   },
   computed: {
     ...mapFields({

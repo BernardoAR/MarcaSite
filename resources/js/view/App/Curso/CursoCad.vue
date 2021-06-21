@@ -216,7 +216,7 @@ export default {
         let formData = this.objToFormData(this.data);
         const res = await this.chamaApi(
           "post",
-          "/app/curso/storeUpdate",
+          "/app/curso/store-update",
           formData
         );
         if (res.status === 200) {
