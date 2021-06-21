@@ -1,100 +1,72 @@
 <template>
   <div>
-    <Table :loading="carregando" :columns="columns" :data="data" ref="table">
-      <template slot-scope="{ row, index }" slot="id">
-        <Input
-          type="text"
-          v-model="valores.editID"
-          v-if="valores.editIndex === index"
-          readonly
-        />
-        <span v-else>{{ row.id }}</span>
+    <modal
+      titulo="Deletar Inscrição"
+      texto="Deseja realmente excluir esta inscrição?"
+      ok="Sim"
+      cancelar="Cancelar"
+      @click-ok="deletaInscricao"
+    ></modal>
+    <v-data-table
+      :headers="colunas"
+      :items="data"
+      :loading="carregando"
+      loading-text="Carregando..."
+    >
+      <template v-slot:item="row">
+        <tr>
+          <td>{{ row.item.id }}</td>
+          <td>{{ row.item.inscrito }}</td>
+          <td>{{ row.item.data_inscricao }}</td>
+          <td>{{ row.item.categoria }}</td>
+          <td>{{ row.item.cpf }}</td>
+          <td>{{ row.item.email }}</td>
+          <td>{{ row.item.uf }}</td>
+          <td :class="pegaCor(row.item.status)">
+            <v-edit-dialog
+              :return-value.sync="row.item.status"
+              large
+              persistent
+              cancel-text="Cancelar"
+              save-text="Salvar"
+              @save="salvar(row)"
+            >
+              <div>{{ options[row.item.status - 1].text }}</div>
+              <template v-slot:input>
+                <b-form-select v-model="row.item.status" :options="options">
+                  <template #first>
+                    <b-form-select-option :value="null"
+                      >-- Status --</b-form-select-option
+                    >
+                  </template>
+                </b-form-select>
+              </template>
+            </v-edit-dialog>
+          </td>
+          <td>{{ row.item.total }}</td>
+          <td>
+            <b-button
+              size="sm"
+              class="mb-2"
+              variant="outline-primary"
+              @click="$router.push(`/inscricao/edit/${row.item.id}`)"
+            >
+              <b-icon icon="pencil" aria-hidden="true"></b-icon>
+            </b-button>
+            <b-button
+              size="sm"
+              class="mb-2"
+              variant="outline-primary"
+              @click="excluirClicado(row)"
+            >
+              <b-icon icon="trash" aria-hidden="true"></b-icon>
+            </b-button>
+          </td>
+        </tr>
       </template>
-      <template slot-scope="{ row, index }" slot="inscrito">
-        <Input
-          type="text"
-          v-model="valores.editInscrito"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.inscrito }}</span>
-      </template>
-      <template slot-scope="{ row, index }" slot="data_inscricao">
-        <Input
-          type="text"
-          v-model="valores.editDataInscricao"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.data_inscricao }}</span>
-      </template>
+    </v-data-table>
 
-      <template slot-scope="{ row, index }" slot="categoria">
-        <Input
-          type="text"
-          v-model="valores.editCategoria"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.categoria }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="cpf">
-        <Input
-          type="text"
-          v-model="valores.editCpf"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.cpf }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="email">
-        <Input
-          type="text"
-          v-model="valores.editEmail"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.email }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="uf">
-        <Input
-          type="text"
-          v-model="valores.editUf"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.uf }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="status">
-        <b-form-select
-          v-model="valores.editStatus"
-          :options="options"
-          v-if="valores.editIndex === index"
-        >
-        </b-form-select>
-        <span v-else>{{ retornaTitulo(row.status) }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="total">
-        <Input
-          type="number"
-          v-model="valores.editTotal"
-          v-if="valores.editIndex === index"
-        />
-        <span v-else>{{ row.total }}</span>
-      </template>
-
-      <template slot-scope="{ row, index }" slot="action">
-        <div v-if="valores.editIndex === index">
-          <Button @click="handleSave(index)">Salvar</Button>
-          <Button @click="valores.editIndex = -1">Cancelar</Button>
-        </div>
-        <div v-else>
-          <Button @click="handleEdit(row, index)">Editar</Button>
-          <Button @click="handleDelete(row, index)">Deletar</Button>
-        </div>
-      </template>
-    </Table>
-
-    <Button type="primary" size="large">
+    <b-button size="sm" class="mb-2" variant="outline-primary">
       <download-csv
         :data="data"
         :labels="header"
@@ -102,11 +74,16 @@
         :separator-excel="true"
       >
         Exportar CSV
-      </download-csv></Button
+      </download-csv>
+    </b-button>
+    <b-button
+      size="sm"
+      class="mb-2"
+      variant="outline-primary"
+      @click="exportPDF"
     >
-    <Button type="primary" size="large" @click="exportPDF">
-      Exportar PDF</Button
-    >
+      Exportar PDF
+    </b-button>
   </div>
 </template>
 <script>
@@ -115,6 +92,11 @@ import "jspdf-autotable";
 
 const doc = new jsPDF();
 export default {
+  excluirClicado(row) {
+    this.linha = row;
+    this.$bvModal.show("modal");
+  },
+
   data() {
     return {
       options: null,
@@ -150,56 +132,20 @@ export default {
         "Status",
         "Total",
       ],
-      columns: [
-        {
-          slot: "id",
-          title: "ID",
-        },
-        { slot: "inscrito", title: "Inscrito" },
-        { slot: "data_inscricao", title: "Data de inscrição" },
-        { slot: "categoria", title: "Categoria" },
-        { slot: "cpf", title: "CPF" },
-        { slot: "email", title: "E-mail" },
-        { slot: "uf", title: "UF" },
-        {
-          slot: "status",
-          title: "Status",
-          filters: [
-            {
-              label: "Cancelados",
-              value: 1,
-            },
-            {
-              label: "Aguardando Pagamento",
-              value: 2,
-            },
-            {
-              label: "Pagos",
-              value: 3,
-            },
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            return row.status == value;
-          },
-        },
-        { slot: "total", title: "Total" },
-        { slot: "action", title: "Ações" },
+      colunas: [
+        { value: "id", text: "ID" },
+        { value: "inscrito", text: "Inscrito" },
+        { value: "data_inscricao", text: "Data de inscrição" },
+        { value: "categoria", text: "Categoria" },
+        { value: "cpf", text: "CPF" },
+        { value: "email", text: "E-mail" },
+        { value: "uf", text: "UF" },
+        { value: "status", text: "Status" },
+        { value: "total", text: "Total" },
+        { value: "action", text: "Ações" },
       ],
       data: [],
       dataPDF: [],
-      valores: {
-        editIndex: -1,
-        editID: "",
-        editInscrito: "",
-        editDataInscricao: "",
-        editCategoria: "",
-        editCpf: "",
-        editEmail: "",
-        editUf: "",
-        editStatus: "",
-        editTotal: "",
-      },
     };
   },
   async created() {
@@ -213,6 +159,46 @@ export default {
     });
   },
   methods: {
+    async salvar(row) {
+      const res = await this.chamaApi(
+        "put",
+        `/app/inscricao/update-status/${row.item.id}`,
+        {
+          status: row.item.status,
+        }
+      );
+      if (res.status == 200 || res.status == 201) {
+        this.sucesso("Status atualizado com sucesso!");
+      } else {
+        this.swr();
+      }
+    },
+
+    pegaCor(valor) {
+      switch (valor) {
+        case 1:
+          return "bg-danger";
+        case 2:
+          return "bg-warning";
+        case 3:
+          return "bg-success";
+      }
+    },
+    async deletaInscricao() {
+      console.log("Tão rapidin");
+      // const res = await this.chamaApi(
+      //   "delete",
+      //   `/app/usuarios/delete/${this.linha.item.id}`,
+      //   []
+      // );
+      // if (res.status === 200 || res.status === 201) {
+      //   this.sucesso("Usuário deletado com sucesso!");
+      //   this.data.splice(this.data.indexOf(this.linha.item), 1);
+      //   this.linha = null;
+      // } else {
+      //   this.swr();
+      // }
+    },
     exportPDF() {
       doc.autoTable({ head: [this.head], body: this.dataPDF });
       doc.save("Inscricao.pdf");
@@ -226,42 +212,6 @@ export default {
         }
         this.dataPDF.push(dado);
       }
-    },
-    retornaTitulo(id) {
-      return this.options[id - 1].text;
-    },
-    handleEdit(row, index) {
-      this.valores.editID = row.id;
-      this.valores.editInscrito = row.inscrito;
-      this.valores.editDataInscricao = row.data_inscricao;
-      this.valores.editCategoria = row.categoria;
-      this.valores.editCpf = row.cpf;
-      this.valores.editEmail = row.email;
-      this.valores.editUf = row.uf;
-      this.valores.editStatus = row.status;
-      this.valores.editTotal = row.total;
-      this.valores.editIndex = index;
-    },
-    async handleDelete(row, index) {
-      const res = await this.chamaApi("delete", `/app/inscricao/${row.id}`, []);
-      if (res.status === 200 || res.status === 201) {
-        this.sucesso("Deletado com sucesso!");
-        delete this.data[index];
-      } else {
-        this.erro("Não foi possível deletar! Tente novamente mais tarde.");
-      }
-    },
-    handleSave(index) {
-      this.data[index].id = this.valores.editID;
-      this.data[index].inscrito = this.valores.editInscrito;
-      this.data[index].data_inscricao = this.valores.editDataInscricao;
-      this.data[index].categoria = this.valores.editCategoria;
-      this.data[index].cpf = this.valores.editCpf;
-      this.data[index].email = this.valores.editEmail;
-      this.data[index].uf = this.valores.editUf;
-      this.data[index].status = this.valores.editStatus;
-      this.data[index].total = this.valores.editTotal;
-      this.valores.editIndex = -1;
     },
   },
 };

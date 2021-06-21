@@ -49,6 +49,11 @@ const routes = [
         meta: { precisaLogin: true }
     },
     {
+        path: "/inscricao/edit/:id",
+        component: InscricaoCad,
+        meta: { precisaLogin: true }
+    },
+    {
         path: "/inscricao/list",
         component: InscricaoList,
         meta: { precisaLogin: true }

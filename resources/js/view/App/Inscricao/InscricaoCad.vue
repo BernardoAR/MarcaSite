@@ -77,7 +77,9 @@ export default {
   components: { Contato, Endereco, Usuario },
   async created() {
     this.getCursos();
-    this.$store.state.usuarioForm.id = null;
+    if (this.$route.params.id != null) {
+      this.atualiza(this.$route.params.id);
+    }
   },
   methods: {
     usuarioMudou(id) {

@@ -21,7 +21,6 @@
             <template #button-content>
               <Icon type="md-cog" />
             </template>
-            <b-dropdown-item href="#">Perfil</b-dropdown-item>
             <b-dropdown-item @click="deslogar">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

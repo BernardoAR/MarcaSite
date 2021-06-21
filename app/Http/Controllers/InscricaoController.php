@@ -198,37 +198,22 @@ class InscricaoController extends Controller
         return $dadosUsuario->id;
     }
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Inscricao  $inscricao
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Inscricao $inscricao)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Inscricao  $inscricao
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Inscricao $inscricao)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Atualiza o Status baseado no id da inscrição
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Inscricao  $inscricao
+     * @param  \App\Models\Status  $id ID do status
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Inscricao $inscricao)
+    public function updateStatus(Request $request, $id)
     {
-        //
+        $inscricao = Inscricao::find($id);
+        // Se existir, atualiza
+        if ($inscricao) {
+            $inscricao->status_id = $request->status;
+            $inscricao->save();
+            return response()->json('Status atualizado com sucesso.');
+        }
+        return response()->json('Inscrição não encontrada.', 500);
     }
 
     /**
