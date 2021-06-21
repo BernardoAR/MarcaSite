@@ -1,5 +1,5 @@
 <template>
-  <h2>Home Component</h2>
+  <h2>Seja Bem-vindo(a)!</h2>
 </template>
 <script>
 export default {};

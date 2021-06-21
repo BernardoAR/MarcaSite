@@ -59,7 +59,7 @@
                   class="form-control"
                   name="password_confirmation"
                   required
-                  v-model="confSenha.valor"
+                  v-model="data.confSenha"
                   autocomplete="new-password"
                   placeholder="Confirmar Senha"
                 />
@@ -102,10 +102,10 @@ export default {
         email: "",
         senha: "",
         cargo: null,
+        confSenha: "",
       },
       estaCadastrando: false,
       options: null,
-      confSenha: { valor: "" },
     };
   },
   async created() {
@@ -123,7 +123,6 @@ export default {
         senha: "required|minLength:8|match:confSenha",
         cargo: "required",
       });
-      this.estaCadastrando = true;
       erros.map((valor) => {
         this.$store.state.possuiErroForm = true;
         this.erro(valor);
@@ -148,8 +147,8 @@ export default {
             this.swr();
           }
         }
-        this.estaCadastrando = false;
       }
+      this.estaCadastrando = false;
     },
   },
 };

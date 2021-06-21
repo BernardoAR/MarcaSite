@@ -79,20 +79,20 @@ class CursoController extends Controller
         // Pega o material, caso tenha um file
         $material = (empty($idFile)) ? new Material() : Material::find($idFile);
         // Se o nome do material for igual, não faz nada
-        if (($material->caminho == $request->pathFile) && (!empty($material->caminho))) {
-            return $material->caminho;
-        } else {
+        if (!empty($file)) {
             $arquivo = new ArquivoClass();
             $caminho = $arquivo->upload($file);
             $material->nome = $caminho['nome'];
             $material->caminho = $caminho['caminho'];
             $material->save();
             // Salva valor do cursoMaterial
-            $cursoMaterial = new CursoMaterial();
+            $cursoMaterial =  (empty($idFile)) ? new CursoMaterial() : CursoMaterial::where('curso_materiais.materiais_id', $idFile)->first();
             $cursoMaterial->cursos_id = $idCurso;
             $cursoMaterial->materiais_id = $material->id;
             $cursoMaterial->save();
             return $caminho['caminho'];
+        } else {
+            $material->caminho;
         }
     }
     /**
