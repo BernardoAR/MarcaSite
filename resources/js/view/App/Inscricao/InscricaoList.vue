@@ -28,7 +28,7 @@
           <td>{{ row.item.inscrito }}</td>
           <td>{{ row.item.data_inscricao }}</td>
           <td>{{ row.item.categoria }}</td>
-          <td>{{ row.item.cpf }}</td>
+          <td>{{ formatCPF(row.item.cpf) }}</td>
           <td>{{ row.item.email }}</td>
           <td>{{ row.item.uf }}</td>
           <td :class="pegaCor(row.item.status)">
@@ -223,12 +223,18 @@ export default {
       for (let i in this.dataFiltrado) {
         let dado = [];
         for (let j in this.fields) {
-          if (this.fields[j] == "status") {
-            dado.push(
-              this.options[this.dataFiltrado[i][this.fields[j]] - 1].text
-            );
-          } else {
-            dado.push(this.dataFiltrado[i][this.fields[j]]);
+          switch (this.fields[j]) {
+            case "status":
+              dado.push(
+                this.options[this.dataFiltrado[i][this.fields[j]] - 1].text
+              );
+              break;
+            case "cpf":
+              dado.push(this.formataCPF(this.dataFiltrado[i][this.fields[j]]));
+              break;
+            default:
+              dado.push(this.dataFiltrado[i][this.fields[j]]);
+              break;
           }
         }
         this.dataPDF.push(dado);

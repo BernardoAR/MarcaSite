@@ -26,7 +26,3 @@ Route::get('/cargo-usuario', [App\Http\Controllers\CargoUsuarioController::class
 Route::prefix('/usuario')->group(function () {
     Route::post('/store', [UsuarioController::class, 'store']);
 });
-
-// Prefixo para pegar cada parte de manipulação da api de dados
-
-// Prefixo para pegar cada parte de manipulação da api de dados

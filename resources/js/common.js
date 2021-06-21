@@ -29,6 +29,18 @@ export default {
                 return e.response;
             }
         },
+        formatCPF(cpf) {
+            let x = this.regexCPF(cpf);
+            let p4 = x[4] ? `-${x[4]}` : "";
+            let p3 = x[3] ? `.${x[3]}` : "";
+            let p2 = x[2] ? `.${x[2]}` : "";
+            return `${x[1]}${p2}${p3}${p4}`;
+        },
+        regexCPF(cpf) {
+            return String(cpf)
+                .replace(/\D/g, "")
+                .match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
+        },
         validacao(valores, validacao) {
             let erros = [];
             Object.entries(validacao).map(function(obj) {
