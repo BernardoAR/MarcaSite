@@ -33,7 +33,6 @@
 export default {
   methods: {
     deslogar() {
-      localStorage.setItem("autenticado", false);
       window.location.href = "/deslogar";
     },
   },

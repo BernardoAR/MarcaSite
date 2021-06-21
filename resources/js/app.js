@@ -30,19 +30,32 @@ const router = new VueRouter({
     routes
 });
 // Faz as rotas que possuem meta, redirecionar corretamente
-router.beforeEach((to, from, next) => {
-    let autenticado = localStorage.getItem("autenticado");
-    if (to.matched.some(record => record.meta.precisaLogin) && !autenticado) {
-        next("/login");
-    } else if (
-        to.matched.some(record => !record.meta.precisaLogin) &&
-        autenticado
-    ) {
-        next("/home");
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     localStorage.setItem("autenticado", false);
+//     let autenticado = localStorage.getItem("autenticado");
+//     if (to.matched.some(record => record.meta.precisaLogin) && !autenticado) {
+//         console.log("Passa aqui 1");
+//         console.log(autenticado);
+//         console.log(to);
+//         console.log(from);
+//         next("/login");
+//     } else if (
+//         to.matched.some(record => !record.meta.precisaLogin) &&
+//         autenticado
+//     ) {
+//         console.log("Passa aqui 2");
+//         console.log(autenticado);
+//         console.log(to);
+//         console.log(from);
+//         next("/home");
+//     } else {
+//         console.log("Passa aqui 3");
+//         console.log(autenticado);
+//         console.log(to);
+//         console.log(from);
+//         next();
+//     }
+// });
 Vue.component("app", require("./view/App.vue").default);
 
 const app = new Vue({

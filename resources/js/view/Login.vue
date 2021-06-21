@@ -52,7 +52,7 @@
           @click="login"
           :disabled="estaLogando"
           :loading="estaLogando"
-          variant="primary"
+          variant="outline-primary"
         >
           {{ estaLogando ? "Logando..." : "Login" }}
         </b-button>
@@ -88,7 +88,6 @@ export default {
       const res = await this.chamaApi("post", "/login/logar", this.data);
       if (res.status === 200) {
         this.info(res.data.msg);
-        localStorage.setItem("autenticado", true);
         window.location.href = "/home";
       } else {
         if (res.status === 401) {

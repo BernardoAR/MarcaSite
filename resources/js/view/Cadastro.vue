@@ -80,7 +80,7 @@
           @click="cadastro"
           :disabled="estaCadastrando"
           :loading="estaCadastrando"
-          variant="primary"
+          variant="outline-primary"
         >
           {{ estaCadastrando ? "Cadastrando..." : "Cadastrar" }}
         </b-button>

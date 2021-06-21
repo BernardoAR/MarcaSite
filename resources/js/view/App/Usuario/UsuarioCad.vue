@@ -2,10 +2,12 @@
   <div>
     <usuario :desabilitar="desabilitarSenha" ref="usuario"></usuario>
     <b-button
+      variant="outline-primary"
       type="submit"
       @click="cadastro"
       :disabled="estaCadastrando"
       :loading="estaCadastrando"
+      class="mt-4"
     >
       {{
         update
@@ -27,6 +29,9 @@ export default {
     if (this.$route.params.id != null) {
       this.atualiza(this.$route.params.id);
     }
+  },
+  unmounted() {
+    this.limpaCampos();
   },
   watch: {
     "$store.state.usuarioForm.id": function (novoVal, antVal) {
@@ -80,9 +85,6 @@ export default {
     },
     limpaCampos() {
       this.$refs.usuario.limpaCampos();
-    },
-    pegaDados() {
-      console.log(this.$store.state.usuarioForm);
     },
   },
   components: { Usuario },

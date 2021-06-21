@@ -1,14 +1,18 @@
 <template>
   <div>
-    <footer class="sticky-footer bg-dark fixed-bottom">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto p-2">
-          <span>Copyright © Bernardo Alves Roballo</span>
-        </div>
+    <div>
+      <div class="fluid-container footer bg-dark">
+        <p class="text-center">Copyright &copy; Bernardo Alves Roballo.</p>
       </div>
-    </footer>
+    </div>
   </div>
 </template>
+<style scoped>
+.fluid-container.footer > *:last-child {
+  margin-bottom: 0px;
+  color: #fff;
+}
+</style>
 <script>
 export default {};
 </script>

@@ -11,73 +11,48 @@
     </div>
     <div class="form-group row">
       <div class="form-label-group col-sm-6">
+        <b-form-input v-model="nome" type="text" placeholder="Nome" trim />
+      </div>
+      <div class="form-label-group col-sm-6">
+        <b-form-input v-model="email" type="email" placeholder="E-mail" trim />
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="form-label-group col-sm-6">
         <b-form-input
-          v-model="nome"
+          v-model="cpf"
           type="text"
-          id="nome"
-          name="nome"
-          placeholder="Nome"
+          :formatter="formatCPF"
+          placeholder="CPF"
           trim
         />
       </div>
       <div class="form-label-group col-sm-6">
-        <input
-          v-model="email"
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-          placeholder="E-mail"
-          required
-        />
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="form-label-group col-sm-6">
-        <input
-          v-model="cpf"
-          type="number"
-          class="form-control"
-          id="cpf"
-          name="cpf"
-          placeholder="CPF"
-          required
-        />
-      </div>
-      <div class="form-label-group col-sm-6">
-        <input
+        <b-form-input
           v-model="empresa"
           type="text"
-          class="form-control"
-          id="empresa"
-          name="empresa"
           placeholder="Empresa"
+          trim
         />
       </div>
     </div>
     <div class="form-group row">
       <div class="form-label-group col-sm-6">
-        <input
+        <b-form-input
           :disabled="desabilitar"
           v-model="senha"
           type="password"
-          class="form-control"
-          id="senha"
-          name="senha"
           placeholder="Senha"
-          required
+          trim
         />
       </div>
       <div class="form-label-group col-sm-6">
-        <input
+        <b-form-input
           :disabled="desabilitar"
           v-model="confSenha"
           type="password"
-          class="form-control"
-          id="confSenha"
-          name="confSenha"
           placeholder="Confirmar Senha"
-          required
+          trim
         />
       </div>
     </div>
@@ -118,8 +93,23 @@ export default {
   },
   props: ["desabilitar"],
   methods: {
+    formatCPF(cpf) {
+      let x = this.regexCPF(cpf);
+      let p4 = x[4] ? `-${x[4]}` : "";
+      let p3 = x[3] ? `.${x[3]}` : "";
+      let p2 = x[2] ? `.${x[2]}` : "";
+      return `${x[1]}${p2}${p3}${p4}`;
+    },
+    regexCPF(cpf) {
+      return String(cpf)
+        .replace(/\D/g, "")
+        .match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
+    },
     valida() {
       let erros = [];
+      this.$store.state.usuarioForm.dadosUsuario.cpf = this.regexCPF(
+        this.$store.state.usuarioForm.dadosUsuario.cpf
+      )[0];
       // Valida a parte do usuarioForm
       erros = this.validacao(this.$store.state.usuarioForm, {
         email: "required|email",
@@ -151,7 +141,8 @@ export default {
       this.$store.state.usuarioForm.email = dados.email;
       this.$store.state.usuarioForm.tipo = dados.cargo_usuarios_id;
       this.$store.state.usuarioForm.nome = dados.nome;
-      this.$store.state.usuarioForm.dadosUsuario.cpf = dados.cpf ?? "";
+      this.$store.state.usuarioForm.dadosUsuario.cpf =
+        this.formatCPF(dados.cpf) ?? "";
       this.$store.state.usuarioForm.dadosUsuario.empresa = dados.empresa ?? "";
       this.$store.state.usuarioForm.dadosUsuario.profissao =
         dados.tipo_usuarios_id ?? null;

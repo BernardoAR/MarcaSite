@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
 import Usuario from "./store/usuario";
+import Endereco from "./store/endereco";
+import Contato from "./store/contato";
 
 import { createHelpers } from "vuex-map-fields";
 const { getField, updateField } = createHelpers({
@@ -15,7 +17,9 @@ export default new Vuex.Store({
         autenticado: false
     },
     modules: {
-        usuarioForm: Usuario
+        usuarioForm: Usuario,
+        enderecoForm: Endereco,
+        contatoForm: Contato
     },
     getters: { getField },
 

@@ -15,8 +15,6 @@ export default function validacaoValor(valor, validacao, campo) {
         let array = validacao.split(":");
         switch (array[0]) {
             case "minLength":
-                console.log(array[1]);
-                console.log(valor1.length);
                 return {
                     resultado: array[1] <= valor1.length,
                     mensagem: `O campo ${campo} necessita de ao menos ${array[1]} caracteres.`
