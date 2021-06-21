@@ -43,7 +43,8 @@
       @click="cadastro"
       :disabled="estaCadastrando"
       :loading="estaCadastrando"
-      variant="primary"
+      variant="outline-primary"
+      class="mt-4"
     >
       {{
         update

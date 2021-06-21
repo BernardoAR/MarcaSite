@@ -23,6 +23,15 @@ class CursoController extends Controller
         return response()->json(Curso::orderBy('updated_at', 'DESC')->get());
     }
     /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function getCurso($id)
+    {
+        return response()->json(Curso::join('curso_materiais', 'curso_materiais.cursos_id', '=', 'cursos.id')->join('materiais', 'materiais.id', '=', 'curso_materiais.materiais_id')->where('cursos.id', $id)->get(['cursos.id', 'cursos.quantidade', 'cursos.nome_curso', 'cursos.descricao', 'cursos.data_inicio', 'cursos.data_fim', 'cursos.valor', 'curso_materiais.materiais_id', 'materiais.caminho', 'materiais.nome AS nome_material'])->first());
+    }
+    /**
      * Método utilizado para pegar uma coleção de array para dropdowns
      *
      * @return void
@@ -32,111 +41,92 @@ class CursoController extends Controller
         return response()->json(ResourcesCurso::collection(Curso::where('data_inicio', '<=', date('Y-m-d'))->where('data_fim', '>=', date('Y-m-d'))->orderBy('updated_at', 'DESC')->get()));
     }
     /**
-     * Store a newly created resource in storage.
+     * Atualiza ou grava dados
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeUpdate(Request $request)
     {
         try {
             DB::beginTransaction();
-            $curso = $this->requestsCurso($request);
-            $curso->save();
+            $idCurso = $this->requestsCurso($request, $request->id);
             if ($request->file != null) {
-                $caminho = $this->insereMaterial($request->file, $curso->id);
+                $caminho = $this->insereMaterial($request, $idCurso, $request->idFile);
             }
             DB::commit();
-            return response()->json(['msg' => 'Curso cadastrado com sucesso!'], 200);
+            return response()->json(['msg' => 'Registro salvo com sucesso!'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            $arquivo = new ArquivoClass();
-            $arquivo->remove($caminho);
-
-            return response()->json(['msg' => 'Ocorreu um erro ao cadastrar o curso'], 401);
+            if (!empty($caminho)) {
+                $arquivo = new ArquivoClass();
+                $arquivo->remove($caminho);
+            }
+            return response()->json(['msg' => 'Ocorreu um erro ao cadastrar o curso',  'data' => $e->getMessage(), 'linha' => $e->getLine()], 401);
         }
     }
+
     /**
      * Método utilizado para a inserção do material em relação ao curso
-     * @param  \Illuminate\Http\Request $request->file
+     * @param  \Illuminate\Http\Request $request
      * @param int $id id do curso
+     * @param int $idFile id do arquivo
      * @return string caminho do file
      */
-    private function insereMaterial($file, $idCurso)
+    private function insereMaterial($request, $idCurso, $idFile)
     {
-        $arquivo = new ArquivoClass();
-        $caminho = $arquivo->upload($file);
-        // Salva valor do Material
-        $material = new Material();
-        $material->nome = $caminho['nome'];
-        $material->caminho = $caminho['caminho'];
-        $material->save();
-        // Salva valor do cursoMaterial
-        $cursoMaterial = new CursoMaterial();
-        $cursoMaterial->cursos_id = $idCurso;
-        $cursoMaterial->materiais_id = $material->id;
-        $cursoMaterial->save();
-        return $caminho['caminho'];
+        $file = $request->file;
+        // Pega o material, caso tenha um file
+        $material = (empty($idFile)) ? new Material() : Material::find($idFile);
+        // Se o nome do material for igual, não faz nada
+        if (($material->caminho == $request->pathFile) && (!empty($material->caminho))) {
+            return $material->caminho;
+        } else {
+            $arquivo = new ArquivoClass();
+            $caminho = $arquivo->upload($file);
+            $material->nome = $caminho['nome'];
+            $material->caminho = $caminho['caminho'];
+            $material->save();
+            // Salva valor do cursoMaterial
+            $cursoMaterial = new CursoMaterial();
+            $cursoMaterial->cursos_id = $idCurso;
+            $cursoMaterial->materiais_id = $material->id;
+            $cursoMaterial->save();
+            return $caminho['caminho'];
+        }
     }
     /**
      * Método utilizado para adicionar os requests do curso
      *
      * @param \Illuminate\Http\Request  $request
-     * @return Curso
+     * @return int $id ID do curso
      */
-    private function requestsCurso(Request $request)
+    private function requestsCurso(Request $request, $id)
     {
-        $curso = new Curso();
+        $curso = (empty($id)) ? new Curso() : Curso::find($id);
         $curso->nome_curso = $request->nomeCurso;
         $curso->descricao = $request->descricao;
         $curso->data_inicio = $request->dataInicio;
         $curso->data_fim = $request->dataFim;
         $curso->valor = $request->valor;
         $curso->quantidade = $request->quantidade;
-        return $curso;
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Curso $curso)
-    {
-        //
+        $curso->save();
+        return $curso->id;
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Remove o curso
      *
-     * @param  \App\Models\Curso  $curso
+     * @param int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Curso $curso)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Curso $curso)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Curso $curso)
-    {
-        //
+        $curso = Curso::find($id);
+        if ($curso) {
+            $curso->delete();
+            return response()->json('Curso deletado com sucesso.');
+        }
+        return response()->json('Curso não encontrado.', 500);
     }
 }

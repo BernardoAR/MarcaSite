@@ -26,12 +26,12 @@ export default function validacaoValor(valor, validacao, campo) {
                 };
             case "greaterEqual":
                 return {
-                    resultado: array[1] >= valor1,
+                    resultado: array[1] <= valor1,
                     mensagem: `O valor do campo "${campo}" precisa ser maior ou igual a ${array[1]}.`
                 };
             case "lessEqual":
                 return {
-                    resultado: array[1] <= valor,
+                    resultado: array[1] >= valor,
                     mensagem: `O valor do campo "${campo}" precisa ser menor ou igual a ${array[1]}.`
                 };
             case "match":

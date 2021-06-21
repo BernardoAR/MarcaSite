@@ -34,9 +34,10 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
         Route::get('/', [App\Http\Controllers\UsuarioController::class, 'index']);
         Route::get('/get', [App\Http\Controllers\UsuarioController::class, 'getAll']);
         Route::get('/get/{id}', [App\Http\Controllers\UsuarioController::class, 'getUsuarioDados']);
-        Route::post('/store', [App\Http\Controllers\UsuarioController::class, 'storeUpdateUsuarioDados']);
+        Route::post('/storeUpdate', [App\Http\Controllers\UsuarioController::class, 'storeUpdateUsuarioDados']);
         Route::delete('/delete/{id}', [App\Http\Controllers\UsuarioController::class, 'destroy']);
     });
+    Route::post('/material/download', [App\Http\Controllers\MaterialController::class, 'download']);
     Route::get('/tipo-contatos', [TipoContatoController::class, 'index']);
     Route::get('/tipo-usuarios', [TipoUsuarioController::class, 'index']);
     Route::prefix('/tipo-contato')->group(function () {
@@ -47,7 +48,9 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
     Route::prefix('/curso')->group(function () {
         Route::get('/', [App\Http\Controllers\CursoController::class, 'index']);
         Route::get('/get', [App\Http\Controllers\CursoController::class, 'get']);
-        Route::post('/store', [App\Http\Controllers\CursoController::class, 'store']);
+        Route::get('/getCurso/{id}', [App\Http\Controllers\CursoController::class, 'getCurso']);
+        Route::post('/storeUpdate', [App\Http\Controllers\CursoController::class, 'storeUpdate']);
+        Route::delete('/delete/{id}', [App\Http\Controllers\CursoController::class, 'destroy']);
     });
     Route::prefix('/tipo-usuario')->group(function () {
         Route::get('/get', [App\Http\Controllers\TipoUsuarioController::class, 'index']);

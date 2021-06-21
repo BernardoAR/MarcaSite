@@ -65,13 +65,7 @@ export default {
         this.data.splice(this.data.indexOf(this.linha.item), 1);
         this.linha = null;
       } else {
-        if (res.status == 422) {
-          for (let i in res.data.errors) {
-            this.e(res.data.errors[i][0]);
-          }
-        } else {
-          this.swr();
-        }
+        this.swr();
       }
     },
     excluirClicado(row) {

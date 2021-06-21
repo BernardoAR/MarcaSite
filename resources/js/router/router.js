@@ -34,6 +34,11 @@ const routes = [
         meta: { precisaLogin: true }
     },
     {
+        path: "/curso/edit/:id",
+        component: CursoCad,
+        meta: { precisaLogin: true }
+    },
+    {
         path: "/curso/list",
         component: CursoList,
         meta: { precisaLogin: true }

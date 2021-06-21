@@ -17,12 +17,13 @@ export default {
             return formData;
         },
         // Método genérico para a chamada de apis
-        async chamaApi(metodo, url, dataObj) {
+        async chamaApi(metodo, url, dataObj, outros = {}) {
             try {
                 return await axios({
                     method: metodo,
                     url: url,
-                    data: dataObj
+                    data: dataObj,
+                    ...outros
                 });
             } catch (e) {
                 return e.response;

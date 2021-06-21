@@ -27,7 +27,7 @@
               size="sm"
               class="mb-2"
               variant="outline-primary"
-              @click="$router.push(`/usuario/edit/${row.item.id}`)"
+              @click="$router.push(`/curso/edit/${row.item.id}`)"
             >
               <b-icon icon="pencil" aria-hidden="true"></b-icon>
             </b-button>
@@ -74,7 +74,20 @@ export default {
     });
   },
   methods: {
-    async deletaCurso() {},
+    async deletaCurso() {
+      const res = await this.chamaApi(
+        "delete",
+        `/app/curso/delete/${this.linha.item.id}`,
+        []
+      );
+      if (res.status === 200 || res.status === 201) {
+        this.sucesso("Curso deletado com sucesso!");
+        this.data.splice(this.data.indexOf(this.linha.item), 1);
+        this.linha = null;
+      } else {
+        this.swr();
+      }
+    },
     excluirClicado(row) {
       this.linha = row;
       this.$bvModal.show("modal");

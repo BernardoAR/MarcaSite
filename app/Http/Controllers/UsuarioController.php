@@ -25,27 +25,6 @@ class UsuarioController extends Controller
         return response()->json(Usuario::join('cargo_usuarios', 'cargo_usuarios.id', '=', 'usuarios.cargo_usuarios_id')->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'cargo_usuarios.titulo AS tipo']));
     }
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'bail|required|email|unique:usuarios',
-            'senha' => 'bail|required|min:8',
-            'nome'  => 'bail|required'
-        ]);
-        $usuario = new Usuario();
-        $usuario->email = $request->email;
-        $usuario->senha = bcrypt($request->senha);
-        $usuario->nome = $request->nome;
-        $usuario->api_token = Str::random(60);
-        $usuario->cargo_usuarios_id = $request->cargo;
-        $usuario->save();
-    }
-    /**
      * Método utilizado para pegar os dados do usuário, junto com
      * @param int $id do usuario
      *
@@ -73,16 +52,6 @@ class UsuarioController extends Controller
             DB::rollBack();
             return response()->json(['msg' => 'Ocorreu um erro ao se registrar', 'data' => $e->getMessage(), 'linha' => $e->getLine()], 401);
         }
-        // Verifica o ID
-        $usuario = Usuario::find($request->id);
-
-        if (empty($request->id)) {
-            $usuario->senha = bcrypt($request->senha);
-        }
-
-        $usuario->save();
-        return $request;
-        // $usuario->contato;
     }
     /**
      * Método utilizado para criar ou atualizar o usuario

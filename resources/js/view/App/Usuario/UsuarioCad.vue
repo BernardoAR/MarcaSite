@@ -58,7 +58,7 @@ export default {
       if (!this.$store.state.possuiErroForm) {
         const res = await this.chamaApi(
           "post",
-          `/app/usuarios/store`,
+          `/app/usuarios/storeUpdate`,
           this.$store.state.usuarioForm
         );
         if (res.status === 200 || res.status === 201) {
