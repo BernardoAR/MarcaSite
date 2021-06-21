@@ -7,11 +7,20 @@
       cancelar="Cancelar"
       @click-ok="deletaInscricao"
     ></modal>
+    <v-text-field
+      v-model="pesquisa"
+      append-icon="mdi-magnify"
+      label="Pesquisar"
+      single-line
+      hide-details
+    ></v-text-field>
     <v-data-table
+      @current-items="valoresAtuais"
       :headers="colunas"
       :items="data"
       :loading="carregando"
       loading-text="Carregando..."
+      :search="pesquisa"
     >
       <template v-slot:item="row">
         <tr>
@@ -68,7 +77,7 @@
 
     <b-button size="sm" class="mb-2" variant="outline-primary">
       <download-csv
-        :data="data"
+        :data="dataFiltrado"
         :labels="header"
         :fields="fields"
         :separator-excel="true"
@@ -90,7 +99,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-const doc = new jsPDF();
 import Modal from "../../../components/Modal.vue";
 export default {
   components: { Modal },
@@ -99,6 +107,7 @@ export default {
       options: null,
       carregando: true,
       linha: null,
+      pesquisa: "",
       fields: [
         "inscrito",
         "data_inscricao",
@@ -144,19 +153,22 @@ export default {
       ],
       data: [],
       dataPDF: [],
+      dataFiltrado: [],
     };
   },
   async created() {
     this.chamaApi("get", "/app/inscricao/get", []).then((response) => {
       this.data = response.data;
       this.carregando = false;
-      this.adicionaCamposDataPDF(response.data);
     });
     this.chamaApi("get", "/app/status", []).then((response) => {
       this.options = response.data;
     });
   },
   methods: {
+    valoresAtuais(data) {
+      this.dataFiltrado = data;
+    },
     excluirClicado(row) {
       this.linha = row;
       this.$bvModal.show("modal");
@@ -201,15 +213,23 @@ export default {
       }
     },
     exportPDF() {
+      this.adicionaCamposDataPDF();
+      let doc = new jsPDF();
       doc.autoTable({ head: [this.head], body: this.dataPDF });
       doc.save("Inscricao.pdf");
     },
-    adicionaCamposDataPDF(data) {
+    adicionaCamposDataPDF() {
       this.dataPDF = [];
-      for (let i in data) {
+      for (let i in this.dataFiltrado) {
         let dado = [];
         for (let j in this.fields) {
-          dado.push(data[i][this.fields[j]]);
+          if (this.fields[j] == "status") {
+            dado.push(
+              this.options[this.dataFiltrado[i][this.fields[j]] - 1].text
+            );
+          } else {
+            dado.push(this.dataFiltrado[i][this.fields[j]]);
+          }
         }
         this.dataPDF.push(dado);
       }

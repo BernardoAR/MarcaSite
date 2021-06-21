@@ -114,33 +114,42 @@ export default {
     });
   },
   methods: {
+    validaCadastro() {
+      let erros = [];
+      // Valida a parte do usuarioForm
+      erros = this.validacao(this.data, {
+        nome: "required",
+        email: "required|email",
+        senha: "required|minLength:8|match:confSenha",
+        cargo: "required",
+      });
+      this.estaCadastrando = true;
+      erros.map((valor) => {
+        this.$store.state.possuiErroForm = true;
+        this.erro(valor);
+      });
+    },
     async cadastro() {
-      if (this.data.nome.trim() == "") return this.erro("Nome é obrigatório!");
-      if (this.data.email.trim() == "")
-        return this.erro("E-mail é obrigatório");
-      if (this.data.senha.trim() == "")
-        return this.erro("Senha é obrigatório!");
-      if (this.data.senha.length < 8)
-        return this.erro("Senha precisa de 8 dígitos");
-      if (this.confSenha.valor != this.data.senha)
-        return this.erro('Campo "Senha" e "Confirmar Senha" não coincidem!');
-      if (this.data.cargo == null)
-        return this.erro("Campo de cargo não pode ficar sem ser preenchido!");
-      this.estaCadastrando = true;
-      const res = await this.chamaApi("post", "api/usuario/store", this.data);
-      if (res.status === 200 || res.status === 201) {
-        this.sucesso("Usuário cadastrado com sucesso!");
-        this.$router.push({ path: "login" });
-      } else {
-        if (res.status == 422) {
-          for (let i in res.data.errors) {
-            this.e(res.data.errors[i][0]);
-          }
+      this.validaCadastro();
+      if (!this.$store.state.possuiErroForm) {
+        this.estaCadastrando = true;
+        const res = await this.chamaApi("post", "api/usuario/store", this.data);
+        if (res.status === 200 || res.status === 201) {
+          this.sucesso("Usuário cadastrado com sucesso!");
+          this.$router.push({ path: "login" });
         } else {
-          this.swr();
+          if (res.status == 422) {
+            this.estaCadastrando = false;
+            for (let i in res.data.errors) {
+              this.e(res.data.errors[i][0]);
+            }
+          } else {
+            this.estaCadastrando = false;
+            this.swr();
+          }
         }
+        this.estaCadastrando = false;
       }
-      this.estaCadastrando = true;
     },
   },
 };
