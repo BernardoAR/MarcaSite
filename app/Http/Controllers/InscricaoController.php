@@ -15,6 +15,38 @@ use Illuminate\Support\Str;
 class InscricaoController extends Controller
 {
     /**
+     * Método utilizado para pegar os dados de usuário em relação a todos os dados necessários da inscrição
+     *
+     * @return void
+     */
+    public function getInscricaoUsuario($id)
+    {
+        $valor =
+            Inscricao::leftJoin('usuarios', 'usuarios.id', '=', 'inscricoes.usuarios_id')->leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')
+            ->leftJoin('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
+            ->where('inscricoes.id', $id)
+            ->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.tipo_usuarios_id', 'enderecos.id AS id_endereco', 'enderecos.logradouro', 'enderecos.numero', 'enderecos.uf', 'enderecos.cep', 'enderecos.cidade', 'enderecos.complemento', 'inscricoes.cursos_id'])->first();
+        $this->retornaContatos($valor, $valor['id']);
+        return response()->json($valor);
+    }
+    /**
+     * Método utilizado para retorna os contatos baseado no usuário
+     *
+     * @param int $id
+     * @return void
+     */
+    public function retornaContatos(&$valor, $id)
+    {
+        $contatos = Contato::join('dados_usuario_contatos', 'dados_usuario_contatos.contatos_id', '=', 'contatos.id')->join('dados_usuarios', 'dados_usuarios.id', '=', 'dados_usuario_contatos.dados_usuarios_id')->where('dados_usuarios.usuarios_id', $id)->get();
+        foreach ($contatos as $contato) {
+            if ($contato['tipo_contatos_id'] == 2) {
+                $valor['telefone'] = $contato['numero'];
+            } else if ($contato['tipo_contatos_id'] == 1) {
+                $valor['celular'] = $contato['numero'];
+            }
+        }
+    }
+    /**
      * Método utilizado para pegar a lista de inscrição
      *
      * @return \Illuminate\Http\Response
@@ -56,7 +88,7 @@ class InscricaoController extends Controller
             $idEndereco = $this->requestsEndereco($request, $request->endereco['id']);
             $idDadosUsuario =  $this->requestsDadosUsuario($request->usuario, $idUsuario, $idEndereco);
             $this->requestsContato($request, $idDadosUsuario);
-            $this->requestsInscricao($request, $idUsuario);
+            $this->requestsInscricao($request, $idUsuario, $request->id);
             DB::commit();
             return response()->json(['msg' => 'Inscrição cadastrada com sucesso!'], 200);
         } catch (\Exception $e) {
@@ -73,7 +105,6 @@ class InscricaoController extends Controller
      */
     private function requestsUsuario($request, $id)
     {
-
         $usuario = (empty($id)) ? new Usuario() : Usuario::find($id);
         $usuario->nome = $request->usuario['nome'];
         $usuario->email = $request->usuario['email'];
@@ -96,7 +127,7 @@ class InscricaoController extends Controller
     {
         $telefoneAdicionado = false;
         $celularAdicionado = false;
-        $contatos = Contato::join('dados_usuario_contatos', 'dados_usuario_contatos.contatos_id', '=', 'contatos.id')->get(['contatos.*']);
+        $contatos = Contato::join('dados_usuario_contatos', 'dados_usuario_contatos.contatos_id', '=', 'contatos.id')->where('dados_usuario_contatos.dados_usuarios_id', $idDadosUsuario)->get(['contatos.*']);
         if (!empty($contatos)) {
             foreach ($contatos as $contato) {
                 if ($contato->tipo_contatos_id == 1) {
@@ -168,14 +199,17 @@ class InscricaoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $idUsuario id do usuario
      * @param  int  $idEndereco id do endereço
+     * @param  int  $idEndereco id da inscrição
      * @return void
      */
-    private function requestsInscricao($request, $idUsuario)
+    private function requestsInscricao($request, $idUsuario, $idInscricao)
     {
-        $inscricao = new Inscricao();
+        $inscricao = (empty($idInscricao)) ? new Inscricao() : Inscricao::find($idInscricao);
         $inscricao->usuarios_id = $idUsuario;
         $inscricao->cursos_id = $request->curso;
-        $inscricao->status_id = 2;
+        if (empty($idInscricao)) {
+            $inscricao->status_id = 2;
+        }
         $inscricao->save();
     }
     /**
@@ -217,7 +251,7 @@ class InscricaoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a inscrição específica
      *
      * @param  \App\Models\Inscricao  $inscricao
      * @return \Illuminate\Http\Response
@@ -227,8 +261,8 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::find($id);
         if ($inscricao) {
             $inscricao->delete();
-            return response()->json('Tipo de Contato deletado com sucesso.', 200);
+            return response()->json('Inscrição deletada com sucesso.', 200);
         }
-        return response()->json('Tipo de Contato não encontrado.', 500);
+        return response()->json('Inscrição não encontrada.', 500);
     }
 }

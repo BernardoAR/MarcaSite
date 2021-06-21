@@ -91,16 +91,14 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const doc = new jsPDF();
+import Modal from "../../../components/Modal.vue";
 export default {
-  excluirClicado(row) {
-    this.linha = row;
-    this.$bvModal.show("modal");
-  },
-
+  components: { Modal },
   data() {
     return {
       options: null,
       carregando: true,
+      linha: null,
       fields: [
         "inscrito",
         "data_inscricao",
@@ -159,6 +157,10 @@ export default {
     });
   },
   methods: {
+    excluirClicado(row) {
+      this.linha = row;
+      this.$bvModal.show("modal");
+    },
     async salvar(row) {
       const res = await this.chamaApi(
         "put",
@@ -185,19 +187,18 @@ export default {
       }
     },
     async deletaInscricao() {
-      console.log("Tão rapidin");
-      // const res = await this.chamaApi(
-      //   "delete",
-      //   `/app/usuarios/delete/${this.linha.item.id}`,
-      //   []
-      // );
-      // if (res.status === 200 || res.status === 201) {
-      //   this.sucesso("Usuário deletado com sucesso!");
-      //   this.data.splice(this.data.indexOf(this.linha.item), 1);
-      //   this.linha = null;
-      // } else {
-      //   this.swr();
-      // }
+      const res = await this.chamaApi(
+        "delete",
+        `/app/inscricao/delete/${this.linha.item.id}`,
+        []
+      );
+      if (res.status === 200 || res.status === 201) {
+        this.sucesso("Inscrição deletada com sucesso!");
+        this.data.splice(this.data.indexOf(this.linha.item), 1);
+        this.linha = null;
+      } else {
+        this.swr();
+      }
     },
     exportPDF() {
       doc.autoTable({ head: [this.head], body: this.dataPDF });

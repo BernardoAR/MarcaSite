@@ -27,8 +27,9 @@ Route::prefix('/app')->middleware([App\Http\Middleware\ChecaLogin::class])->grou
     Route::prefix('/inscricao')->group(function () {
         Route::post('/store', [App\Http\Controllers\InscricaoController::class, 'store']);
         Route::get('/get', [App\Http\Controllers\InscricaoController::class, 'getInscricaoList']);
+        Route::get('/get-inscricao-usuario/{id}', [App\Http\Controllers\InscricaoController::class, 'getInscricaoUsuario']);
         Route::put('/update-status/{id}', [App\Http\Controllers\InscricaoController::class, 'updateStatus']);
-        Route::delete('/{id}', [App\Http\Controllers\InscricaoController::class, 'destroy']);
+        Route::delete('/delete/{id}', [App\Http\Controllers\InscricaoController::class, 'destroy']);
     });
     Route::get('/status', [App\Http\Controllers\StatusController::class, 'index']);
     Route::prefix('/usuarios')->group(function () {

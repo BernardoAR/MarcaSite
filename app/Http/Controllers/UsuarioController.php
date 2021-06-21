@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Usuario as ResourcesUsuario;
+use App\Models\Contato;
 use App\Models\DadosUsuario;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -37,11 +38,51 @@ class UsuarioController extends Controller
      */
     public function getUsuarioInscricao($id)
     {
-        return response()->json(Usuario::leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')
+        $valor =
+            Usuario::leftJoin('dados_usuarios', 'usuarios.id', '=', 'dados_usuarios.usuarios_id')
             ->leftJoin('enderecos', 'enderecos.id', '=', 'dados_usuarios.enderecos_id')
-            ->leftJoin('dados_usuario_contatos', 'dados_usuario_contatos.dados_usuarios_id', '=', 'dados_usuarios.id')
-            ->leftJoin('contatos', 'contatos.id', '=', 'dados_usuario_contatos.contatos_id')->where('usuarios.id', $id)
-            ->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.tipo_usuarios_id', 'enderecos.id AS id_endereco', 'enderecos.logradouro', 'enderecos.numero', 'enderecos.uf', 'enderecos.cep', 'enderecos.cidade', 'enderecos.complemento'])->first());
+            ->where('usuarios.id', $id)
+            ->get(['usuarios.id', 'usuarios.email', 'usuarios.nome', 'usuarios.cargo_usuarios_id', 'dados_usuarios.cpf', 'dados_usuarios.empresa', 'dados_usuarios.tipo_usuarios_id', 'enderecos.id AS id_endereco', 'enderecos.logradouro', 'enderecos.numero', 'enderecos.uf', 'enderecos.cep', 'enderecos.cidade', 'enderecos.complemento'])->first();
+        $this->retornaContatos($valor, $id);
+        return response()->json($valor);
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'bail|required|email|unique:usuarios',
+            'senha' => 'bail|required|min:8',
+            'nome'  => 'bail|required'
+        ]);
+        $usuario = new Usuario();
+        $usuario->email = $request->email;
+        $usuario->senha = bcrypt($request->senha);
+        $usuario->nome = $request->nome;
+        $usuario->api_token = Str::random(60);
+        $usuario->cargo_usuarios_id = $request->cargo;
+        $usuario->save();
+    }
+    /**
+     * Método utilizado para retorna os contatos baseado no usuário
+     *
+     * @param int $id
+     * @return void
+     */
+    public function retornaContatos(&$valor, $id)
+    {
+        $contatos = Contato::join('dados_usuario_contatos', 'dados_usuario_contatos.contatos_id', '=', 'contatos.id')->join('dados_usuarios', 'dados_usuarios.id', '=', 'dados_usuario_contatos.dados_usuarios_id')->where('dados_usuarios.usuarios_id', $id)->get();
+        foreach ($contatos as $contato) {
+            if ($contato['tipo_contatos_id'] == 2) {
+                $valor['telefone'] = $contato['numero'];
+            } else if ($contato['tipo_contatos_id'] == 1) {
+                $valor['celular'] = $contato['numero'];
+            }
+        }
     }
     /**
      * Método utilizado para pegar os dados do usuário, junto com

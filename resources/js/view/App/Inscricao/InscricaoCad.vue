@@ -78,10 +78,24 @@ export default {
   async created() {
     this.getCursos();
     if (this.$route.params.id != null) {
-      this.atualiza(this.$route.params.id);
+      this.update = true;
+      this.editInscricao(this.$route.params.id);
     }
   },
   methods: {
+    async editInscricao(id) {
+      this.id = id;
+      this.desabilitarSenha = true;
+      const res = await this.chamaApi(
+        "get",
+        `/app/inscricao/get-inscricao-usuario/${id}`,
+        []
+      );
+      if (res.status == 200 || res.status == 201) {
+        this.atualizarCampos(res.data);
+        this.atualizarCurso(res.data);
+      }
+    },
     usuarioMudou(id) {
       if (id !== null) {
         this.atualiza(id);
@@ -93,7 +107,6 @@ export default {
     },
     async atualiza(id) {
       this.desabilitarSenha = true;
-      this.atualizarCampos([]);
       const res = await this.chamaApi(
         "get",
         `/app/usuarios/get-usuario-inscricao/${id}`,
@@ -113,6 +126,9 @@ export default {
       this.$refs.endereco.atualizaEndereco(dados);
       this.$refs.contato.atualizaContato(dados);
     },
+    atualizarCurso(dados) {
+      this.curso = dados.cursos_id;
+    },
     limpaCampos() {
       this.$refs.usuario.limpaUsuario();
       this.$refs.endereco.limpaEndereco();
@@ -127,6 +143,7 @@ export default {
 
       if (!this.$store.state.possuiErroForm) {
         const res = await this.chamaApi("post", "/app/inscricao/store", {
+          id: this.id,
           curso: this.curso,
           usuario: this.$store.state.usuarioForm,
           endereco: this.$store.state.enderecoForm,
@@ -158,6 +175,7 @@ export default {
   },
   data: function () {
     return {
+      id: "",
       curso: null,
       desabilitarSenha: false,
       update: false,
