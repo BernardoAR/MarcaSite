@@ -230,7 +230,7 @@ export default {
               );
               break;
             case "cpf":
-              dado.push(this.formataCPF(this.dataFiltrado[i][this.fields[j]]));
+              dado.push(this.formatCPF(this.dataFiltrado[i][this.fields[j]]));
               break;
             default:
               dado.push(this.dataFiltrado[i][this.fields[j]]);
